@@ -15,6 +15,8 @@ class CreateBuildingsTable extends Migration
     {
         Schema::create('buildings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('image');
             $table->unsignedInteger('cost_in_wood');
             $table->unsignedInteger('cost_in_metal');
             $table->unsignedInteger('cost_in_uranium');
