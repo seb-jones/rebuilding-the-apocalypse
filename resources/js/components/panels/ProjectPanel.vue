@@ -1,6 +1,6 @@
 <template>
     <div class=''>
-        <one-time-assignment v-for="assignment in assignments" :name="assignment.name" :key='assignment.id'></one-time-assignment>
+        <one-time-assignment v-for="project in projects" :key='project.id' :project='project'></one-time-assignment>
     </div>
 </template>
 
@@ -9,7 +9,7 @@ import OneTimeAssignment from '../assignments/OneTimeAssignment';
 
 export default {
     props: {
-        assignments: Array
+        projects: Array
     },
     components: {
         OneTimeAssignment

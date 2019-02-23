@@ -9,8 +9,13 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script>window.civ = @json($civ)</script>
+    {{-- Globals passed from Laraval --}}
+        @if (isset($civ)) 
+    <script defer>
+            window.civ = @json($civ)
+    </script> 
+        @endif
+
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
@@ -39,11 +44,13 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <resource-bar :resources='resources'></resource-bar>
+                        @auth
+                            <resource-bar :resources='resources'></resource-bar>
+                        @endauth
                         <!-- Authentication Links -->
                         {{--
-                        @guest
-                            <li class="nav-item">
+                            @guest
+                                <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             @if (Route::has('register'))
@@ -70,7 +77,7 @@
                                 </div>
                             </li>
                         @endguest
-                        --}}
+                    --}}
                     </ul>
                 </div>
             </div>

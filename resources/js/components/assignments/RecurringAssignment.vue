@@ -6,7 +6,7 @@
             </div>
             <div class='col-4'>
         <button type="button" class="btn btn-dark" @click.prevent='resource.incrementPeople'>+</button>
-        <button type="button" class="btn btn-dark" @click.prevent='resource.decrementPeople'>-</button>
+        <button type="button" class="btn btn-dark" @click.prevent='resource.decrementPeople' :disabled='resource.people <= 0'>-</button>
             </div>
         </div>
         <div class="progress">

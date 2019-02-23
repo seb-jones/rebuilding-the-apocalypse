@@ -1792,8 +1792,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['name']
+  props: {
+    project: Object
+  },
+  computed: {
+    progressStyle: function progressStyle() {
+      return "width: " + this.project.progress + "%";
+    }
+  }
 });
 
 /***/ }),
@@ -1891,7 +1910,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    assignments: Array
+    projects: Array
   },
   components: {
     OneTimeAssignment: _assignments_OneTimeAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -36975,7 +36994,53 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", {}, [_c("p", [_vm._v(_vm._s(_vm.name))])])
+  return _c("div", {}, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _c("p", [_vm._v(_vm._s(_vm.project.label))])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4" }, [
+        _vm.project.progress == 0
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-dark",
+                attrs: { type: "button", disabled: _vm.project.progress > 0 },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.project.startTimer($event)
+                  }
+                }
+              },
+              [_vm._v("Start")]
+            )
+          : _vm._e()
+      ])
+    ]),
+    _vm._v(" "),
+    _vm.project.progress > 0
+      ? _c("div", { staticClass: "progress" }, [
+          _c(
+            "div",
+            {
+              staticClass: "progress-bar",
+              style: _vm.progressStyle,
+              attrs: {
+                role: "progressbar",
+                "aria-valuenow": _vm.project.progress,
+                "aria-valuemin": "0",
+                "aria-valuemax": "100"
+              }
+            },
+            [_vm._v(_vm._s(_vm.project.progress))]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("br")
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37027,7 +37092,7 @@ var render = function() {
           "button",
           {
             staticClass: "btn btn-dark",
-            attrs: { type: "button" },
+            attrs: { type: "button", disabled: _vm.resource.people <= 0 },
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -37123,10 +37188,10 @@ var render = function() {
   return _c(
     "div",
     {},
-    _vm._l(_vm.assignments, function(assignment) {
+    _vm._l(_vm.projects, function(project) {
       return _c("one-time-assignment", {
-        key: assignment.id,
-        attrs: { name: assignment.name }
+        key: project.id,
+        attrs: { project: project }
       })
     }),
     1
@@ -49260,12 +49325,72 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+var Project =
+/*#__PURE__*/
+function () {
+  function Project() {
+    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "tech";
+    var id = arguments.length > 1 ? arguments[1] : undefined;
+    var name = arguments.length > 2 ? arguments[2] : undefined;
+    var label = arguments.length > 3 ? arguments[3] : undefined;
+
+    _classCallCheck(this, Project);
+
+    this.type = type;
+    this.id = id;
+    this.name = name;
+    this.label = label;
+    this.progress = 0;
+    this.timer = null;
+  }
+
+  _createClass(Project, [{
+    key: "tick",
+    value: function tick() {
+      this.progress++;
+
+      if (this.progress >= 100) {
+        clearInterval(this.timer);
+        this.timer = null;
+        this.progress = 0;
+
+        if (this.type === "tech") {
+          for (var i = 0; i < availableTechs.length; ++i) {
+            if (availableTechs[i].id === this.id) {
+              // remove the item at index i
+              availableTechs.splice(i, 1);
+              break;
+            }
+          }
+        } else if (this.type === "building") {
+          for (var i = 0; i < availableBuildings.length; ++i) {
+            if (availableBuildings[i].id === this.id) {
+              // remove the item at index i
+              availableBuildings.splice(i, 1);
+              break;
+            }
+          }
+        }
+      }
+    } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
+
+  }, {
+    key: "startTimer",
+    value: function startTimer() {
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), // TODO speed
+      200);
+    }
+  }]);
+
+  return Project;
+}();
 
 var Resource =
 /*#__PURE__*/
@@ -49339,26 +49464,17 @@ function () {
 
 
 
+ // Globals
 
+window.availableTechs = [new Project("tech", 1, 'farming', 'Farming'), new Project("tech", 2, 'mining', 'Mining')];
+window.availableBuildings = [new Project("building", 1, 'house', 'House'), new Project("building", 2, 'lumber-yard', 'Lumber Yard'), new Project("building", 3, 'nuke-silo', 'Nuke Silo')];
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {
     civ: window.civ,
     resources: [new Resource(1, 5, 'people', 'People', 'Reproduce'), new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium')],
-    availableTechs: [{
-      id: 1,
-      name: "Mining"
-    }, {
-      id: 2,
-      name: "Farming"
-    }],
-    availableBuildings: [{
-      id: 1,
-      name: "House"
-    }, {
-      id: 2,
-      name: "Lumber Yard"
-    }]
+    availableTechs: window.availableTechs,
+    availableBuildings: window.availableBuildings
   },
   components: {
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],

@@ -8,10 +8,10 @@
             <materials-panel :resources='resources' :civ='civ'></materials-panel>
 
             <h2>Research</h2>
-            <project-panel :assignments='availableTechs'></project-panel>
+            <project-panel :projects='availableTechs'></project-panel>
 
             <h2>Building</h2>
-            <project-panel :assignments='availableBuildings'></project-panel>
+            <project-panel :projects='availableBuildings'></project-panel>
         </div>
         <div class='col-md-4'>
             <h2>Reports</h2>
