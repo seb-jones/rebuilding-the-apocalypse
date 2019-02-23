@@ -1,10 +1,8 @@
 <template>
     <div class=''>
         <p>Unassigned People: {{ civ.people }}</p>
-        <recurring-assignment name='Reproduce' progress='90'></recurring-assignment>
-        <recurring-assignment name='Gather Wood' progress='100'></recurring-assignment>
-        <recurring-assignment name='Smith Metal' progress='20'></recurring-assignment>
-        <recurring-assignment name='Mine Uranium' progress='0'></recurring-assignment>
+
+        <recurring-assignment v-for='resource in resources' :key='resource.id' :resource='resource'></recurring-assignment>
     </div>
 </template>
 
@@ -13,7 +11,8 @@ import RecurringAssignment from '../assignments/RecurringAssignment';
 
 export default {
     props: {
-        civ: Object
+        civ: Object,
+        resources: Array
     },
     components: {
         RecurringAssignment

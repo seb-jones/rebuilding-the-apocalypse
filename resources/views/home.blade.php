@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h2>Resources</h2>
-            <materials-panel :civ='civ'></materials-panel>
+            <materials-panel :resources='resources' :civ='civ'></materials-panel>
 
             <h2>Research</h2>
             <project-panel :assignments='availableTechs'></project-panel>
@@ -14,7 +14,7 @@
             <project-panel :assignments='availableBuildings'></project-panel>
         </div>
         <div class='col-md-4'>
-            <h2>Intelligence</h2>
+            <h2>Reports</h2>
             <pre class='intelligence-panel'>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae tortor condimentum lacinia quis vel eros donec ac. Mus mauris vitae ultricies leo integer. Iaculis eu non diam phasellus vestibulum lorem. Nulla facilisi nullam vehicula ipsum a arcu cursus vitae congue. Id semper risus in hendrerit gravida. Sit amet luctus venenatis lectus magna. Ipsum dolor sit amet consectetur adipiscing elit. Diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque. Velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus. Aliquet eget sit amet tellus cras adipiscing. Lacus suspendisse faucibus interdum posuere. Ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget. Ut eu sem integer vitae justo eget magna. Hac habitasse platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Sed lectus vestibulum mattis ullamcorper velit sed.
 

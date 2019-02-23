@@ -1769,12 +1769,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    civ: Object
+    resources: Array
   }
 });
 
@@ -1820,14 +1817,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    name: String,
-    progress: String
+    resource: Object
   },
   computed: {
     progressStyle: function progressStyle() {
-      return "width: " + this.progress + "%";
+      return "width: " + this.resource.progress + "%";
+    },
+    peopleLabel: function peopleLabel() {
+      return " [" + this.resource.people + "]";
     }
   }
 });
@@ -1852,12 +1859,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    civ: Object
+    civ: Object,
+    resources: Array
   },
   components: {
     RecurringAssignment: _assignments_RecurringAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -36936,15 +36942,16 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("li", [_vm._v("People: " + _vm._s(_vm.civ.people))]),
-    _vm._v(" "),
-    _c("li", [_vm._v("Wood: " + _vm._s(_vm.civ.wood))]),
-    _vm._v(" "),
-    _c("li", [_vm._v("Metal: " + _vm._s(_vm.civ.metal))]),
-    _vm._v(" "),
-    _c("li", [_vm._v("Uranium: " + _vm._s(_vm.civ.uranium))])
-  ])
+  return _c(
+    "div",
+    { staticClass: "resource-bar" },
+    _vm._l(_vm.resources, function(resource) {
+      return _c("li", { key: resource.id }, [
+        _vm._v(_vm._s(resource.label) + ": " + _vm._s(resource.quantity))
+      ])
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -36993,7 +37000,45 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", {}, [
-    _c("p", [_vm._v(_vm._s(_vm.name))]),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _c("p", [
+          _vm._v(_vm._s(_vm.resource.assignmentLabel) + _vm._s(_vm.peopleLabel))
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-dark",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.resource.incrementPeople($event)
+              }
+            }
+          },
+          [_vm._v("+")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-dark",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.resource.decrementPeople($event)
+              }
+            }
+          },
+          [_vm._v("-")]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "progress" }, [
       _c(
@@ -37003,12 +37048,12 @@ var render = function() {
           style: _vm.progressStyle,
           attrs: {
             role: "progressbar",
-            "aria-valuenow": _vm.progress,
+            "aria-valuenow": _vm.resource.progress,
             "aria-valuemin": "0",
             "aria-valuemax": "100"
           }
         },
-        [_vm._v(_vm._s(_vm.progress))]
+        [_vm._v(_vm._s(_vm.resource.progress))]
       )
     ]),
     _vm._v(" "),
@@ -37043,23 +37088,14 @@ var render = function() {
     [
       _c("p", [_vm._v("Unassigned People: " + _vm._s(_vm.civ.people))]),
       _vm._v(" "),
-      _c("recurring-assignment", {
-        attrs: { name: "Reproduce", progress: "90" }
-      }),
-      _vm._v(" "),
-      _c("recurring-assignment", {
-        attrs: { name: "Gather Wood", progress: "100" }
-      }),
-      _vm._v(" "),
-      _c("recurring-assignment", {
-        attrs: { name: "Smith Metal", progress: "20" }
-      }),
-      _vm._v(" "),
-      _c("recurring-assignment", {
-        attrs: { name: "Mine Uranium", progress: "0" }
+      _vm._l(_vm.resources, function(resource) {
+        return _c("recurring-assignment", {
+          key: resource.id,
+          attrs: { resource: resource }
+        })
       })
     ],
-    1
+    2
   )
 }
 var staticRenderFns = []
@@ -49218,12 +49254,86 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/ResourceBar */ "./resources/js/components/ResourceBar.vue");
 /* harmony import */ var _components_panels_MaterialsPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/panels/MaterialsPanel */ "./resources/js/components/panels/MaterialsPanel.vue");
 /* harmony import */ var _components_panels_ProjectPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/panels/ProjectPanel */ "./resources/js/components/panels/ProjectPanel.vue");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+var Resource =
+/*#__PURE__*/
+function () {
+  function Resource(id, quantity, name, label, assignmentLabel) {
+    _classCallCheck(this, Resource);
+
+    this.id = id;
+    this.quantity = quantity;
+    this.name = name;
+    this.label = label;
+    this.assignmentLabel = assignmentLabel;
+    this.progress = 0;
+    this.people = 0;
+    this.timer = null;
+  }
+
+  _createClass(Resource, [{
+    key: "tick",
+    value: function tick() {
+      this.progress++;
+
+      if (this.progress >= 100) {
+        this.quantity++;
+        this.progress = 0;
+      }
+    } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
+
+  }, {
+    key: "startTimer",
+    value: function startTimer() {
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), 200 / this.people);
+    }
+  }, {
+    key: "incrementPeople",
+    value: function incrementPeople() {
+      this.people++;
+
+      if (this.timer === null) {
+        this.progress = 0;
+      }
+
+      this.startTimer();
+    }
+  }, {
+    key: "decrementPeople",
+    value: function decrementPeople() {
+      if (this.people > 0) {
+        this.people--;
+
+        if (this.people <= 0) {
+          this.progress = 0;
+          clearInterval(this.timer);
+          this.timer = null;
+        } else {
+          this.startTimer();
+        }
+      }
+    }
+  }]);
+
+  return Resource;
+}();
 
 
 
@@ -49234,6 +49344,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {
     civ: window.civ,
+    resources: [new Resource(1, 5, 'people', 'People', 'Reproduce'), new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium')],
     availableTechs: [{
       id: 1,
       name: "Mining"
@@ -49254,10 +49365,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     MaterialsPanel: _components_panels_MaterialsPanel__WEBPACK_IMPORTED_MODULE_3__["default"],
     ProjectPanel: _components_panels_ProjectPanel__WEBPACK_IMPORTED_MODULE_4__["default"]
   }
-}); // Tick function
-//setInterval(tick, 1000);
+}); // Tick functions
+//setInterval(sync_with_server, 1000);
 
-function tick() {
+function sync_with_server() {
   axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/tick').then(function (response) {
     console.log(response);
   }).catch(function (error) {

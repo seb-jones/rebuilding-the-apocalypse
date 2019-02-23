@@ -13,6 +13,14 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.resource-bar {
+    li {
+        display: block;
+        float: left;
+        margin-left: 1em;
+    }
+}
+
 .intelligence-panel {
     height: 60vh;
     overflow: auto;
@@ -20,4 +28,8 @@
     color: white;
     word-wrap: normal;
     white-space: pre-wrap;
+}
+
+.progress {
+    background-color: #333;
 }

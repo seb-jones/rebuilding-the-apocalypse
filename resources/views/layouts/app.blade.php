@@ -39,7 +39,7 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <resource-bar :civ='civ'></resource-bar>
+                        <resource-bar :resources='resources'></resource-bar>
                         <!-- Authentication Links -->
                         {{--
                         @guest
