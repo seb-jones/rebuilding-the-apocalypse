@@ -10667,6 +10667,7 @@ a.text-dark:focus {
 }
 
 .intelligence-panel {
+  padding: 0.75em 1em;
   height: 60vh;
   overflow: auto;
   background-color: black;

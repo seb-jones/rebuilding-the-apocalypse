@@ -1,7 +1,9 @@
 require('./bootstrap');
 
-class Project {
-    constructor(type = "tech", id, name, label) {
+class Project 
+{
+    constructor(type = "tech", id, name, label) 
+    {
         this.type = type;
         this.id = id;
         this.name = name;
@@ -10,7 +12,8 @@ class Project {
         this.timer = null;
     }
 
-    tick() {
+    tick() 
+    {
         this.progress++;
 
         if (this.progress >= 100) {
@@ -26,6 +29,8 @@ class Project {
                         break;
                     }
                 }
+
+                addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
             }
             else if (this.type === "building") {
                 for (var i = 0; i < availableBuildings.length; ++i) {
@@ -35,12 +40,15 @@ class Project {
                         break;
                     }
                 }
+
+                addReport(Math.random(), Date.now(), "Construction of the '" + this.label + "' is complete.", "normal");
             }
         }
     }
 
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
-    startTimer() {
+    startTimer() 
+    {
         if (this.timer)
             clearInterval(this.timer);
 
@@ -57,7 +65,8 @@ class Project {
     }
 }
 
-class Resource {
+class Resource 
+{
     constructor(id, quantity, name, label, assignmentLabel) {
         this.id = id;
         this.quantity = quantity;
@@ -69,7 +78,8 @@ class Resource {
         this.timer = null;
     }
 
-    tick() {
+    tick() 
+    {
         this.progress++;
 
         if (this.progress >= 100) {
@@ -79,7 +89,8 @@ class Resource {
     }
 
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
-    startTimer() {
+    startTimer() 
+    {
         if (this.timer)
             clearInterval(this.timer);
 
@@ -94,7 +105,8 @@ class Resource {
         );
     }
 
-    incrementPeople() {
+    incrementPeople() 
+    {
         this.people++;
 
         if (this.timer === null) {
@@ -104,7 +116,8 @@ class Resource {
         this.startTimer();
     }
 
-    decrementPeople() {
+    decrementPeople() 
+    {
         if (this.people > 0) {
             this.people--;
             if (this.people <= 0) {
@@ -119,13 +132,24 @@ class Resource {
     }
 }
 
+class Report 
+{
+    constructor(id, time, message, type) 
+    {
+        this.id = id;
+        this.time = time;
+        this.message = message;
+        this.type = type;
+    }
+}
+
 import axios from 'axios';
 import Vue from 'vue';
 import ResourceBar from './components/ResourceBar';
 import MaterialsPanel from './components/panels/MaterialsPanel';
 import ProjectPanel from './components/panels/ProjectPanel';
 
-// Globals
+// Global Variables
 window.availableTechs = [
     new Project("tech", 1, 'farming', 'Farming'),
     new Project("tech", 2, 'mining', 'Mining'),
@@ -137,10 +161,29 @@ window.availableBuildings = [
     new Project("building", 3, 'nuke-silo', 'Nuke Silo'),
 ];
 
+window.reports = [
+    new Report(1, Date.now(), "Hello", "normal"),
+    new Report(2, Date.now(), "World", "warning"),
+    new Report(3, Date.now(), "Uh oh", "error"),
+    new Report(4, Date.now(), "Banana Hammock", "normal"),
+];
+
+// Global Functions
+function addReport(id, time, message, type="normal") 
+{
+    reports.unshift(new Report(id, time, message, type));
+}
+
 const app = new Vue({
     el: '#app',
     data: {
         civ: window.civ,
+
+        availableTechs: window.availableTechs,
+
+        availableBuildings: window.availableBuildings,
+
+        reports: window.reports,
 
         resources: [
             new Resource(1, 5, 'people', 'People', 'Reproduce'),
@@ -148,10 +191,6 @@ const app = new Vue({
             new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'),
             new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium'),
         ],
-
-        availableTechs: window.availableTechs,
-
-        availableBuildings: window.availableBuildings,
     },
     components: {
         ResourceBar,

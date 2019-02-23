@@ -49364,6 +49364,8 @@ function () {
               break;
             }
           }
+
+          addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
         } else if (this.type === "building") {
           for (var i = 0; i < availableBuildings.length; ++i) {
             if (availableBuildings[i].id === this.id) {
@@ -49372,6 +49374,8 @@ function () {
               break;
             }
           }
+
+          addReport(Math.random(), Date.now(), "Construction of the '" + this.label + "' is complete.", "normal");
         }
       }
     } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
@@ -49460,21 +49464,38 @@ function () {
   return Resource;
 }();
 
+var Report = function Report(id, time, message, type) {
+  _classCallCheck(this, Report);
+
+  this.id = id;
+  this.time = time;
+  this.message = message;
+  this.type = type;
+};
 
 
 
 
- // Globals
+
+ // Global Variables
 
 window.availableTechs = [new Project("tech", 1, 'farming', 'Farming'), new Project("tech", 2, 'mining', 'Mining')];
 window.availableBuildings = [new Project("building", 1, 'house', 'House'), new Project("building", 2, 'lumber-yard', 'Lumber Yard'), new Project("building", 3, 'nuke-silo', 'Nuke Silo')];
+window.reports = [new Report(1, Date.now(), "Hello", "normal"), new Report(2, Date.now(), "World", "warning"), new Report(3, Date.now(), "Uh oh", "error"), new Report(4, Date.now(), "Banana Hammock", "normal")]; // Global Functions
+
+function addReport(id, time, message) {
+  var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "normal";
+  reports.unshift(new Report(id, time, message, type));
+}
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {
     civ: window.civ,
-    resources: [new Resource(1, 5, 'people', 'People', 'Reproduce'), new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium')],
     availableTechs: window.availableTechs,
-    availableBuildings: window.availableBuildings
+    availableBuildings: window.availableBuildings,
+    reports: window.reports,
+    resources: [new Resource(1, 5, 'people', 'People', 'Reproduce'), new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium')]
   },
   components: {
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],
