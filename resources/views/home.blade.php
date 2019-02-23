@@ -4,13 +4,14 @@
 <div class="container-full">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2>Work</h2>
-            <work-panel :civ='civ'></work-panel>
+            <h2>Resources</h2>
+            <materials-panel :civ='civ'></materials-panel>
 
             <h2>Research</h2>
-            <research-panel :civ='civ'></research-panel>
+            <project-panel :assignments='availableTechs'></project-panel>
 
             <h2>Building</h2>
+            <project-panel :assignments='availableBuildings'></project-panel>
         </div>
         <div class='col-md-4'>
             <h2>Intelligence</h2>

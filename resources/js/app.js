@@ -10,18 +10,26 @@ require('./bootstrap');
 import axios from 'axios';
 import Vue from 'vue';
 import ResourceBar from './components/ResourceBar';
-import WorkPanel from './components/WorkPanel';
-import ResearchPanel from './components/ResearchPanel';
+import MaterialsPanel from './components/panels/MaterialsPanel';
+import ProjectPanel from './components/panels/ProjectPanel';
 
 const app = new Vue({
     el: '#app',
     data: {
-        civ: window.civ
+        civ: window.civ,
+        availableTechs: [
+            { id: 1, name: "Mining" },
+            { id: 2, name: "Farming" },
+        ],
+        availableBuildings: [
+            { id: 1, name: "House" },
+            { id: 2, name: "Lumber Yard" },
+        ],
     },
     components: {
         ResourceBar,
-        WorkPanel,
-        ResearchPanel
+        MaterialsPanel,
+        ProjectPanel
     }
 });
 
