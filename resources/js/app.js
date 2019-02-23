@@ -10,6 +10,8 @@ require('./bootstrap');
 import axios from 'axios';
 import Vue from 'vue';
 import ResourceBar from './components/ResourceBar';
+import WorkPanel from './components/WorkPanel';
+import ResearchPanel from './components/ResearchPanel';
 
 const app = new Vue({
     el: '#app',
@@ -17,12 +19,14 @@ const app = new Vue({
         civ: window.civ
     },
     components: {
-        ResourceBar
+        ResourceBar,
+        WorkPanel,
+        ResearchPanel
     }
 });
 
 // Tick function
-setInterval(tick, 1000);
+//setInterval(tick, 1000);
 
 function tick() {
     axios.post('/tick').then(function (response) {

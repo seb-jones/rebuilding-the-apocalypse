@@ -1,5 +1,6 @@
 <template>
     <div>
+        <li>People: {{ civ.people }}</li>
         <li>Wood: {{ civ.wood }}</li>
         <li>Metal: {{ civ.metal }}</li>
         <li>Uranium: {{ civ.uranium }}</li>
