@@ -1,5 +1,22 @@
 require('./bootstrap');
 
+var sounds = {
+    background: new Audio('/sfx/background.mp3'),
+};
+
+function playAudio(name, loop = false) {
+    if (loop) {
+        sounds[name].addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+    }
+
+    sounds[name].play();
+}
+
+//playAudio('background', true);
+
 class Project 
 {
     constructor(id, name, label, time_per_tick, people = 0, wood = 0, metal = 0, uranium = 0) 

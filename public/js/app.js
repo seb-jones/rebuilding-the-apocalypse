@@ -49357,6 +49357,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+var sounds = {
+  background: new Audio('/sfx/background.mp3')
+};
+
+function playAudio(name) {
+  var loop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  if (loop) {
+    sounds[name].addEventListener('ended', function () {
+      this.currentTime = 0;
+      this.play();
+    }, false);
+  }
+
+  sounds[name].play();
+} //playAudio('background', true);
+
+
 var Project =
 /*#__PURE__*/
 function () {
