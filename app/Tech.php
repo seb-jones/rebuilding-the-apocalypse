@@ -10,6 +10,6 @@ class Tech extends Model
 
     public function allows()
     {
-        return $this->belongsTo('App\Tech', 'allows_id');
+        return $this->belongsTo('App\Tech', 'unlocks_tech_id');
     }
 }

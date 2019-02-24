@@ -74,11 +74,11 @@ class Project
 
 class Resource 
 {
-    constructor(id, name, label, assignmentLabel, time_per_tick) {
+    constructor(id, name, label, assignment_label, time_per_tick) {
         this.id = id;
         this.name = name;
         this.label = label;
-        this.assignmentLabel = assignmentLabel;
+        this.assignment_label = assignment_label;
         this.time_per_tick = time_per_tick;
         this.progress = 0;
         this.timer = null;
@@ -155,6 +155,17 @@ for (var i = 0; i < techs.length; ++i) {
     window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
+window.Resources = [];
+var resData = window.resourceData;
+
+for (var i = 0; i < resData.length; ++i) {
+    window.Resources.push(
+        new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick)
+    );
+}
+
+console.log(window.Resources);
+
 window.reports = [
     /*
     new Report(1, Date.now(), "Hello", "normal"),
@@ -186,12 +197,7 @@ const app = new Vue({
 
         reports: window.reports,
 
-        resources: [
-            new Resource(1, 'people', 'People', 'Recruit', 50),
-            new Resource(2, 'wood', 'Wood', 'Gather Wood', 10),
-            new Resource(3, 'metal', 'Metal', 'Mine Ore', 100),
-            new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium', 250),
-        ],
+        resources: window.Resources,
     },
     components: {
         ResourceBar,

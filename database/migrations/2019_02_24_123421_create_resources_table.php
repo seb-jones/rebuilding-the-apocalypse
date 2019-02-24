@@ -18,8 +18,7 @@ class CreateResourcesTable extends Migration
             $table->string('name');
             $table->string('label');
             $table->string('assignment_label');
-            $table->unsignedInteger('quantity');
-            $table->unsignedInteger('civ_id');
+            $table->string('time_per_tick');
         });
     }
 

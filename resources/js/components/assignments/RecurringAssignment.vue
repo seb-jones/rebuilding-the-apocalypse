@@ -2,7 +2,7 @@
     <div class=''>
         <div class='row'>
             <div class='col-8'>
-        <p>{{ resource.assignmentLabel }}</p>
+        <p>{{ resource.assignment_label }}</p>
             </div>
             <div class='col-4'>
                 <button type="button" class="btn btn-dark" @click.prevent='resource.startTimer' :disabled='resource.progress > 0' v-if='resource.progress == 0'>Start</button>

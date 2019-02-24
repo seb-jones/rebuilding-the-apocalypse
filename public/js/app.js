@@ -37062,7 +37062,7 @@ var render = function() {
   return _c("div", {}, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-8" }, [
-        _c("p", [_vm._v(_vm._s(_vm.resource.assignmentLabel))])
+        _c("p", [_vm._v(_vm._s(_vm.resource.assignment_label))])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-4" }, [
@@ -49377,13 +49377,13 @@ function () {
 var Resource =
 /*#__PURE__*/
 function () {
-  function Resource(id, name, label, assignmentLabel, time_per_tick) {
+  function Resource(id, name, label, assignment_label, time_per_tick) {
     _classCallCheck(this, Resource);
 
     this.id = id;
     this.name = name;
     this.label = label;
-    this.assignmentLabel = assignmentLabel;
+    this.assignment_label = assignment_label;
     this.time_per_tick = time_per_tick;
     this.progress = 0;
     this.timer = null;
@@ -49456,6 +49456,14 @@ for (var i = 0; i < techs.length; ++i) {
   window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
+window.Resources = [];
+var resData = window.resourceData;
+
+for (var i = 0; i < resData.length; ++i) {
+  window.Resources.push(new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick));
+}
+
+console.log(window.Resources);
 window.reports = [
   /*
   new Report(1, Date.now(), "Hello", "normal"),
@@ -49481,7 +49489,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     availableTechs: window.availableTechs,
     completedTechs: window.completedTechs,
     reports: window.reports,
-    resources: [new Resource(1, 'people', 'People', 'Recruit', 50), new Resource(2, 'wood', 'Wood', 'Gather Wood', 10), new Resource(3, 'metal', 'Metal', 'Mine Ore', 100), new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium', 250)]
+    resources: window.Resources
   },
   components: {
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],

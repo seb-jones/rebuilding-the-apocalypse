@@ -10,8 +10,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- Globals passed from Laraval --}}
-    @if (isset($civ)) 
         <script defer>
+    @if (isset($civ)) 
             window.civ = @json($civ);
 
             window.availableTechsRaw = [];
@@ -25,8 +25,12 @@
             @endforeach
 
             window.completedTechsRaw = @json($civ->completedTechs);
-        </script> 
     @endif
+
+    @if (isset($resourceData))
+        window.resourceData = @json($resourceData);
+    @endif
+        </script> 
 
     <script src="{{ asset('js/app.js') }}" defer></script>
 

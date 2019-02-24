@@ -42,5 +42,7 @@ class ProjectController extends Controller
         else {
             return response(null, 200);
         }
+
+        // TODO return unlocked resource as well
     }
 }
