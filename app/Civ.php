@@ -20,11 +20,11 @@ class Civ extends Model
 
     public function completedTechs()
     {
-        return $this->belongsToMany('App\Tech')->using('App\CompletedTech');
+        return $this->belongsToMany('App\Tech', 'completed_techs');
     }
 
     public function availableTechs()
     {
-        return $this->belongsToMany('App\Tech')->using('App\AvailableTech');
+        return $this->belongsToMany('App\Tech', 'available_techs');
     }
 }

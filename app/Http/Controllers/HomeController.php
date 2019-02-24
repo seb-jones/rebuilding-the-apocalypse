@@ -6,6 +6,7 @@ use App\AvailableTech;
 use App\CompletedTech;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -41,8 +42,13 @@ class HomeController extends Controller
             'uranium' => '0',
         ]);
 
-        AvailableTech::truncate();
-        CompletedTech::truncate();
+        DB::table('available_techs')->truncate();
+        DB::table('completed_techs')->truncate();
+
+        DB::table('available_techs')->insert([
+            'civ_id' => $civ->id,
+            'tech_id' => 1
+        ]);
 
         $payload = [
             'resources' => [

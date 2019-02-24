@@ -12,7 +12,9 @@
     {{-- Globals passed from Laraval --}}
         @if (isset($civ)) 
     <script defer>
-            window.civ = @json($civ)
+            window.civ = @json($civ);
+            window.availableTechsRaw = @json($civ->availableTechs);
+            window.completedTechsRaw = @json($civ->completedTechs);
     </script> 
         @endif
 

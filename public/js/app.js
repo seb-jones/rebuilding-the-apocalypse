@@ -49308,15 +49308,9 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 var Project =
 /*#__PURE__*/
 function () {
-  function Project() {
-    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "tech";
-    var id = arguments.length > 1 ? arguments[1] : undefined;
-    var name = arguments.length > 2 ? arguments[2] : undefined;
-    var label = arguments.length > 3 ? arguments[3] : undefined;
-
+  function Project(id, name, label) {
     _classCallCheck(this, Project);
 
-    this.type = type;
     this.id = id;
     this.name = name;
     this.label = label;
@@ -49334,27 +49328,23 @@ function () {
         this.timer = null;
         this.progress = 0;
 
-        if (this.type === "tech") {
-          for (var i = 0; i < availableTechs.length; ++i) {
-            if (availableTechs[i].id === this.id) {
-              // remove the item at index i
-              availableTechs.splice(i, 1);
-              break;
-            }
+        for (var i = 0; i < availableTechs.length; ++i) {
+          if (availableTechs[i].id === this.id) {
+            // remove the item at index i
+            axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/projects/complete', {
+              id: availableTechs[i].id
+            }).then(function (response) {
+              console.log(response);
+            }).catch(function (error) {
+              console.log(error);
+            });
+            var t = availableTechs.splice(i, 1);
+            completedTechs.push(t[0]);
+            break;
           }
-
-          addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
-        } else if (this.type === "building") {
-          for (var i = 0; i < availableBuildings.length; ++i) {
-            if (availableBuildings[i].id === this.id) {
-              // remove the item at index i
-              availableBuildings.splice(i, 1);
-              break;
-            }
-          }
-
-          addReport(Math.random(), Date.now(), "Construction of the '" + this.label + "' is complete.", "normal");
         }
+
+        addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
       }
     } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
 
@@ -49453,7 +49443,20 @@ var Report = function Report(id, time, message, type) {
 
  // Global Variables
 
-window.availableTechs = [new Project("tech", 1, 'farming', 'Farming')];
+window.availableTechs = [];
+var techs = window.availableTechsRaw;
+
+for (var i = 0; i < techs.length; ++i) {
+  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+}
+
+window.completedTechs = [];
+techs = window.completedTechsRaw;
+
+for (var i = 0; i < techs.length; ++i) {
+  window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+}
+
 window.reports = [new Report(1, Date.now(), "Hello", "normal"), new Report(2, Date.now(), "World", "warning"), new Report(3, Date.now(), "Uh oh", "error"), new Report(4, Date.now(), "Banana Hammock", "normal")]; // Global Functions
 
 function addReport(id, time, message) {
@@ -49470,6 +49473,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   data: {
     civ: window.civ,
     availableTechs: window.availableTechs,
+    completedTechs: window.completedTechs,
     reports: window.reports,
     resources: [new Resource(1, 'people', 'People', 'Recruit'), new Resource(2, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium')]
   },
@@ -49481,6 +49485,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   methods: {
     reset: function reset() {
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/reset').then(function (response) {
+        console.log(response.data.availableTechs);
         var resources = response.data.resources;
 
         for (var key in resources) {

@@ -2,9 +2,8 @@ require('./bootstrap');
 
 class Project 
 {
-    constructor(type = "tech", id, name, label) 
+    constructor(id, name, label) 
     {
-        this.type = type;
         this.id = id;
         this.name = name;
         this.label = label;
@@ -21,28 +20,25 @@ class Project
             this.timer = null;
             this.progress = 0;
 
-            if (this.type === "tech") {
-                for (var i = 0; i < availableTechs.length; ++i) {
-                    if (availableTechs[i].id === this.id) {
-                        // remove the item at index i
-                        availableTechs.splice(i, 1);
-                        break;
-                    }
-                }
+            for (var i = 0; i < availableTechs.length; ++i) {
+                if (availableTechs[i].id === this.id) {
+                    // remove the item at index i
 
-                addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
-            }
-            else if (this.type === "building") {
-                for (var i = 0; i < availableBuildings.length; ++i) {
-                    if (availableBuildings[i].id === this.id) {
-                        // remove the item at index i
-                        availableBuildings.splice(i, 1);
-                        break;
-                    }
-                }
+                    axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
+                        console.log(response);
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
 
-                addReport(Math.random(), Date.now(), "Construction of the '" + this.label + "' is complete.", "normal");
+                    var t = availableTechs.splice(i, 1);
+
+                    completedTechs.push(t[0]);
+
+                    break;
+                }
             }
+
+            addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
         }
     }
 
@@ -67,7 +63,7 @@ class Project
             20
         );
         */
-        }
+    }
 }
 
 class Resource 
@@ -139,9 +135,19 @@ import MaterialsPanel from './components/panels/MaterialsPanel';
 import ProjectPanel from './components/panels/ProjectPanel';
 
 // Global Variables
-window.availableTechs = [
-    new Project("tech", 1, 'farming', 'Farming'),
-];
+window.availableTechs = [];
+
+var techs = window.availableTechsRaw;
+for (var i = 0; i < techs.length; ++i) {
+    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+}
+
+window.completedTechs = [];
+
+techs = window.completedTechsRaw;
+for (var i = 0; i < techs.length; ++i) {
+    window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+}
 
 window.reports = [
     new Report(1, Date.now(), "Hello", "normal"),
@@ -168,6 +174,8 @@ const app = new Vue({
 
         availableTechs: window.availableTechs,
 
+        completedTechs: window.completedTechs,
+
         reports: window.reports,
 
         resources: [
@@ -185,6 +193,8 @@ const app = new Vue({
     methods: {
         reset() {
             axios.post('/reset').then(function (response) {
+                console.log(response.data.availableTechs);
+
                 var resources = response.data.resources;
                 for (var key in resources) {
                     updateResources(key, resources[key]);

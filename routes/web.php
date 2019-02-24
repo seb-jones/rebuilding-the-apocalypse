@@ -13,9 +13,13 @@
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
-        Route::post('/reset', 'HomeController@reset');
+    Route::post('/reset', 'HomeController@reset');
 
     Route::post('/tick', 'TickController@tick')->name('tick');
+
+    Route::prefix('/projects')->group(function () {
+        Route::post('/complete', 'ProjectController@complete');
+    });
 
     Route::prefix('/resources')->group(function () {
         Route::post('/increment', 'ResourceController@increment');
