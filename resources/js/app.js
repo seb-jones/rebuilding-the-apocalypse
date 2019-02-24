@@ -23,6 +23,7 @@ class Project
             for (var i = 0; i < availableTechs.length; ++i) {
                 if (availableTechs[i].id === this.id) {
                     // remove the item at index i
+                    console.log(availableTechs[i].id);
 
                     axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
                         console.log(response);
@@ -136,7 +137,6 @@ import ProjectPanel from './components/panels/ProjectPanel';
 
 // Global Variables
 window.availableTechs = [];
-
 var techs = window.availableTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
     window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
@@ -150,10 +150,12 @@ for (var i = 0; i < techs.length; ++i) {
 }
 
 window.reports = [
+    /*
     new Report(1, Date.now(), "Hello", "normal"),
     new Report(2, Date.now(), "World", "warning"),
     new Report(3, Date.now(), "Uh oh", "error"),
     new Report(4, Date.now(), "Banana Hammock", "normal"),
+    */
 ];
 
 // Global Functions

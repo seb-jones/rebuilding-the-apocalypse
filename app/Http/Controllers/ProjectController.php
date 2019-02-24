@@ -10,7 +10,7 @@ class ProjectController extends Controller
     public function complete(Request $request)
     {
         $src = DB::table('available_techs')
-            ->where ('id', $request->id)
+            ->where ('id', request('id'))
             ->select(['id', 'civ_id', 'tech_id'])
             ->first();
 
@@ -21,6 +21,6 @@ class ProjectController extends Controller
                 'tech_id' => $src->tech_id,
             ]);
 
-        DB::table('available_techs')->where('id', $request->id)->delete();
+        DB::table('available_techs')->where('id', request('id'))->delete();
     }
 }

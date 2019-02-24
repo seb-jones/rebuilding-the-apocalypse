@@ -10,13 +10,22 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     {{-- Globals passed from Laraval --}}
-        @if (isset($civ)) 
-    <script defer>
+    @if (isset($civ)) 
+        <script defer>
             window.civ = @json($civ);
-            window.availableTechsRaw = @json($civ->availableTechs);
+
+            window.availableTechsRaw = [];
+            @foreach($civ->availableTechs as $tech)
+                window.availableTechsRaw.push({
+                id: "{{ $tech->pivot->id }}",
+                name: "{{ $tech->name }}",
+                label: "{{ $tech->label }}",
+                });
+            @endforeach
+
             window.completedTechsRaw = @json($civ->completedTechs);
-    </script> 
-        @endif
+        </script> 
+    @endif
 
     <script src="{{ asset('js/app.js') }}" defer></script>
 

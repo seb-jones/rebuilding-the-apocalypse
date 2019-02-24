@@ -49331,6 +49331,7 @@ function () {
         for (var i = 0; i < availableTechs.length; ++i) {
           if (availableTechs[i].id === this.id) {
             // remove the item at index i
+            console.log(availableTechs[i].id);
             axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/projects/complete', {
               id: availableTechs[i].id
             }).then(function (response) {
@@ -49457,7 +49458,14 @@ for (var i = 0; i < techs.length; ++i) {
   window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
 }
 
-window.reports = [new Report(1, Date.now(), "Hello", "normal"), new Report(2, Date.now(), "World", "warning"), new Report(3, Date.now(), "Uh oh", "error"), new Report(4, Date.now(), "Banana Hammock", "normal")]; // Global Functions
+window.reports = [
+  /*
+  new Report(1, Date.now(), "Hello", "normal"),
+  new Report(2, Date.now(), "World", "warning"),
+  new Report(3, Date.now(), "Uh oh", "error"),
+  new Report(4, Date.now(), "Banana Hammock", "normal"),
+  */
+]; // Global Functions
 
 function addReport(id, time, message) {
   var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "normal";

@@ -25,6 +25,7 @@ class Civ extends Model
 
     public function availableTechs()
     {
-        return $this->belongsToMany('App\Tech', 'available_techs');
+        return $this->belongsToMany('App\Tech', 'available_techs')
+            ->withPivot('id');
     }
 }
