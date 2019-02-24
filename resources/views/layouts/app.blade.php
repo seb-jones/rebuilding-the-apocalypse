@@ -44,6 +44,7 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <button type='button' class='btn btn-danger' @click.prevent="reset">Reset</button>
                         @auth
                             <resource-bar :civ='civ' :resources='resources'></resource-bar>
                         @endauth

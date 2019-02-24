@@ -17,4 +17,14 @@ class Civ extends Model
     {
         return $this->hasOne('App\User');
     }
+
+    public function completedTechs()
+    {
+        return $this->belongsToMany('App\Tech')->using('App\CompletedTech');
+    }
+
+    public function availableTechs()
+    {
+        return $this->belongsToMany('App\Tech')->using('App\AvailableTech');
+    }
 }

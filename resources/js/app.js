@@ -67,7 +67,7 @@ class Project
             20
         );
         */
-    }
+        }
 }
 
 class Resource 
@@ -141,7 +141,6 @@ import ProjectPanel from './components/panels/ProjectPanel';
 // Global Variables
 window.availableTechs = [
     new Project("tech", 1, 'farming', 'Farming'),
-    new Project("tech", 2, 'mining', 'Mining'),
 ];
 
 window.reports = [
@@ -182,6 +181,18 @@ const app = new Vue({
         ResourceBar,
         MaterialsPanel,
         ProjectPanel,
+    },
+    methods: {
+        reset() {
+            axios.post('/reset').then(function (response) {
+                var resources = response.data.resources;
+                for (var key in resources) {
+                    updateResources(key, resources[key]);
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     }
 });
 

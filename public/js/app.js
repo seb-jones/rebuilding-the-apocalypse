@@ -49453,7 +49453,7 @@ var Report = function Report(id, time, message, type) {
 
  // Global Variables
 
-window.availableTechs = [new Project("tech", 1, 'farming', 'Farming'), new Project("tech", 2, 'mining', 'Mining')];
+window.availableTechs = [new Project("tech", 1, 'farming', 'Farming')];
 window.reports = [new Report(1, Date.now(), "Hello", "normal"), new Report(2, Date.now(), "World", "warning"), new Report(3, Date.now(), "Uh oh", "error"), new Report(4, Date.now(), "Banana Hammock", "normal")]; // Global Functions
 
 function addReport(id, time, message) {
@@ -49477,6 +49477,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],
     MaterialsPanel: _components_panels_MaterialsPanel__WEBPACK_IMPORTED_MODULE_3__["default"],
     ProjectPanel: _components_panels_ProjectPanel__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  methods: {
+    reset: function reset() {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/reset').then(function (response) {
+        var resources = response.data.resources;
+
+        for (var key in resources) {
+          updateResources(key, resources[key]);
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
   }
 }); // Tick functions
 //setInterval(sync_with_server, 1000);

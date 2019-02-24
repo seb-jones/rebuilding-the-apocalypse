@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTechRequirementFieldToTechTable extends Migration
+class CreateCompletedTechesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddTechRequirementFieldToTechTable extends Migration
      */
     public function up()
     {
-        Schema::table('techs', function (Blueprint $table) {
-            $table->unsignedInteger('tech_requirement_id');
+        Schema::create('completed_techs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('civ_id');
+            $table->unsignedInteger('tech_id');
         });
     }
 
@@ -25,8 +27,6 @@ class AddTechRequirementFieldToTechTable extends Migration
      */
     public function down()
     {
-        Schema::table('techs', function (Blueprint $table) {
-            $table->dropColumn('tech_requirement_id');
-        });
+        Schema::dropIfExists('completed_techs');
     }
 }
