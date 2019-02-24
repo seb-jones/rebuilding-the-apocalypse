@@ -28,21 +28,28 @@ class ProjectController extends Controller
             ->delete();
 
         $tech = Tech::find($src->tech_id);
-        $allows = $tech->allows;
 
-        if ($allows) {
+        $unlocked = [];
+
+        $unlocked_tech = $tech->unlocks_tech;
+
+        if ($unlocked_tech) {
             DB::table('available_techs')
                 ->insert([
                     'civ_id' => $src->civ_id,
-                    'tech_id' => $allows->id,
+                    'tech_id' => $unlocked_tech->id,
                 ]);
 
-            return response($allows, 200);
-        }
-        else {
-            return response(null, 200);
+            $unlocked['tech'] = $unlocked_tech;
         }
 
+        $unlocked_resource = $tech->unlocks_resource;
+
+        if ($unlocked_resource) {
+            $unlocked['resource'] = $unlocked_resource;
+        }
+
+        return response($unlocked, 200);
         // TODO return unlocked resource as well
     }
 }

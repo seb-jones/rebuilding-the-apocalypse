@@ -17,20 +17,35 @@ class Project
         this.progress++;
 
         if (this.progress >= 100) {
-            clearInterval(this.timer);
-            this.timer = null;
             this.progress = 0;
+
+            if (this.timer !== null) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
 
             for (var i = 0; i < availableTechs.length; ++i) {
                 if (availableTechs[i].id === this.id) {
                     // remove the item at index i
                     axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
                         if (response.data) {
-                            var t = response.data;
-                            if (response.data !== null) {
-                                availableTechs.push(
-                                    new Project(t.id, t.name, t.label, t.time_per_tick)
-                                );
+                            var unlocked = response.data;
+                            if (unlocked != null) {
+                                if (unlocked.tech) {
+                                    var t = unlocked.tech;
+
+                                    availableTechs.push(
+                                        new Project(t.id, t.name, t.label, t.time_per_tick)
+                                    );
+                                }
+
+                                if (unlocked.resource) {
+                                    var r = unlocked.resource;
+
+                                    window.Resources.push(
+                                        new Resource(r.id, r.name, r.label, r.assignment_label, r.time_per_tick)
+                                    );
+                                }
                             }
                         }
                     }).catch(function (error) {
@@ -52,11 +67,10 @@ class Project
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
-        /*
         this.progress = 100;
         this.tick();
-        */
 
+        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -69,6 +83,7 @@ class Project
 
             this.time_per_tick
         );
+        */
     }
 }
 
@@ -90,8 +105,11 @@ class Resource
 
         if (this.progress >= 100) {
             this.progress = 0;
-            clearInterval(this.timer);
-            this.timer = null;
+
+            if (this.timer !== null) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
 
             axios.post('/resources/increment', { name: this.name }).then(function (response) {
                 updateResources(response.data.name, response.data.quantity);
@@ -104,11 +122,10 @@ class Resource
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
-        /*
         this.progress = 100;
         this.tick();
-        */
 
+        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -121,6 +138,7 @@ class Resource
 
             this.time_per_tick
         );
+        */
     }
 }
 

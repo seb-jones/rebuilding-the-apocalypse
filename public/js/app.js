@@ -49325,9 +49325,12 @@ function () {
       this.progress++;
 
       if (this.progress >= 100) {
-        clearInterval(this.timer);
-        this.timer = null;
         this.progress = 0;
+
+        if (this.timer !== null) {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
 
         for (var i = 0; i < availableTechs.length; ++i) {
           if (availableTechs[i].id === this.id) {
@@ -49336,10 +49339,18 @@ function () {
               id: availableTechs[i].id
             }).then(function (response) {
               if (response.data) {
-                var t = response.data;
+                var unlocked = response.data;
 
-                if (response.data !== null) {
-                  availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick));
+                if (unlocked != null) {
+                  if (unlocked.tech) {
+                    var t = unlocked.tech;
+                    availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick));
+                  }
+
+                  if (unlocked.resource) {
+                    var r = unlocked.resource;
+                    window.Resources.push(new Resource(r.id, r.name, r.label, r.assignment_label, r.time_per_tick));
+                  }
                 }
               }
             }).catch(function (error) {
@@ -49358,16 +49369,20 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
-      /*
       this.progress = 100;
       this.tick();
+      /*
+      if (this.timer)
+          clearInterval(this.timer);
+       this.timer = setInterval(
+          (function(self) {
+              return function() {
+                  self.tick();
+              }
+          })(this),
+           this.time_per_tick
+      );
       */
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), this.time_per_tick);
     }
   }]);
 
@@ -49396,8 +49411,12 @@ function () {
 
       if (this.progress >= 100) {
         this.progress = 0;
-        clearInterval(this.timer);
-        this.timer = null;
+
+        if (this.timer !== null) {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/increment', {
           name: this.name
         }).then(function (response) {
@@ -49411,16 +49430,20 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
-      /*
       this.progress = 100;
       this.tick();
+      /*
+      if (this.timer)
+          clearInterval(this.timer);
+       this.timer = setInterval(
+          (function(self) {
+              return function() {
+                  self.tick();
+              }
+          })(this),
+           this.time_per_tick
+      );
       */
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), this.time_per_tick);
     }
   }]);
 
