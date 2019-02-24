@@ -49357,23 +49357,42 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-var sounds = {
-  background: new Audio('/sfx/background.mp3')
+window.Sounds = {
+  background: new Audio('/sfx/background.mp3'),
+  click: new Audio('/sfx/click.mp3'),
+  hover: new Audio('/sfx/hover.mp3'),
+  metal: new Audio('/sfx/metal.mp3'),
+  people: new Audio('/sfx/people.mp3'),
+  uranium: new Audio('/sfx/uranium.mp3'),
+  wood: new Audio('/sfx/wood.mp3')
 };
 
 function playAudio(name) {
   var loop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
   if (loop) {
-    sounds[name].addEventListener('ended', function () {
+    window.Sounds[name].addEventListener('ended', function () {
       this.currentTime = 0;
       this.play();
     }, false);
   }
 
-  sounds[name].play();
-} //playAudio('background', true);
+  window.Sounds[name].play();
+}
 
+addEventListener('load', function () {
+  var btns = document.getElementsByTagName('button');
+
+  for (var i = 0; i < btns.length; ++i) {
+    btns[i].addEventListener('click', function (event) {
+      if (!event.target.disabled) playAudio('click');
+    });
+    btns[i].addEventListener('mouseover', function (event) {
+      if (!event.target.disabled) playAudio('hover');
+    });
+  }
+});
+playAudio('background', true);
 
 var Project =
 /*#__PURE__*/
@@ -49503,6 +49522,7 @@ function () {
       this.progress++;
 
       if (this.progress >= 100) {
+        playAudio(this.name);
         this.progress = 0;
 
         if (this.timer !== null) {
