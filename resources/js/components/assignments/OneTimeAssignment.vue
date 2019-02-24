@@ -2,7 +2,7 @@
     <div class=''>
         <div class='row'>
             <div class='col-8'>
-        <p>{{ project.label }}</p>
+                <p>{{ project.label }}</p>
             </div>
             <div class='col-4'>
                 <button v-if="project.progress == 0" type="button" class="btn btn-dark" @click.prevent='project.startTimer' :disabled="project.progress > 0">Start</button>

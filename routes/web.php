@@ -15,6 +15,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', 'HomeController@index')->name('home');
 
     Route::post('/tick', 'TickController@tick')->name('tick');
+
+    Route::prefix('/resources')->group(function () {
+        Route::post('/increment', 'ResourceController@increment');
+    });
 });
 
 Auth::routes();

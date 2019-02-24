@@ -2,14 +2,13 @@
     <div class=''>
         <div class='row'>
             <div class='col-8'>
-        <p>{{ resource.assignmentLabel }}{{ peopleLabel }}</p>
+        <p>{{ resource.assignmentLabel }}</p>
             </div>
             <div class='col-4'>
-        <button type="button" class="btn btn-dark" @click.prevent='resource.incrementPeople'>+</button>
-        <button type="button" class="btn btn-dark" @click.prevent='resource.decrementPeople' :disabled='resource.people <= 0'>-</button>
+                <button type="button" class="btn btn-dark" @click.prevent='resource.startTimer' :disabled='resource.progress > 0' v-if='resource.progress == 0'>Start</button>
             </div>
         </div>
-        <div class="progress">
+        <div class="progress" v-if="resource.progress > 0">
             <div class="progress-bar" role="progressbar" :style="progressStyle" :aria-valuenow="resource.progress" aria-valuemin="0" aria-valuemax="100">{{ resource.progress }}</div>
         </div>
         <br>
@@ -24,9 +23,6 @@ export default {
     computed: {
         progressStyle() {
             return "width: " + this.resource.progress + "%";
-        },
-        peopleLabel() {
-            return " [" + this.resource.people + "]";
         },
     },
 }

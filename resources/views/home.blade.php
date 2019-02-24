@@ -9,9 +9,6 @@
 
             <h2>Research</h2>
             <project-panel :projects='availableTechs'></project-panel>
-
-            <h2>Building</h2>
-            <project-panel :projects='availableBuildings'></project-panel>
         </div>
         <div class='col-md-4'>
             <h2>Reports</h2>

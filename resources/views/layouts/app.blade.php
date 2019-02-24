@@ -45,7 +45,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         @auth
-                            <resource-bar :resources='resources'></resource-bar>
+                            <resource-bar :civ='civ' :resources='resources'></resource-bar>
                         @endauth
                         <!-- Authentication Links -->
                         {{--

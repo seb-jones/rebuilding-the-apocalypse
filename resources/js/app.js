@@ -49,6 +49,10 @@ class Project
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
+        this.progress = 100;
+        this.tick();
+
+        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -60,21 +64,20 @@ class Project
             })(this),
 
             // TODO speed
-            200
+            20
         );
+        */
     }
 }
 
 class Resource 
 {
-    constructor(id, quantity, name, label, assignmentLabel) {
+    constructor(id, name, label, assignmentLabel) {
         this.id = id;
-        this.quantity = quantity;
         this.name = name;
         this.label = label;
         this.assignmentLabel = assignmentLabel;
         this.progress = 0;
-        this.people = 0;
         this.timer = null;
     }
 
@@ -83,14 +86,25 @@ class Resource
         this.progress++;
 
         if (this.progress >= 100) {
-            this.quantity++;
             this.progress = 0;
+            clearInterval(this.timer);
+            this.timer = null;
+
+            axios.post('/resources/increment', { name: this.name }).then(function (response) {
+                updateResources(response.data.name, response.data.quantity);
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     }
 
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
+        this.progress = 100;
+        this.tick();
+
+        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -101,34 +115,9 @@ class Resource
                 }
             })(this),
 
-            200 / this.people
+            20, // TODO resource duration
         );
-    }
-
-    incrementPeople() 
-    {
-        this.people++;
-
-        if (this.timer === null) {
-            this.progress = 0;
-        }
-
-        this.startTimer();
-    }
-
-    decrementPeople() 
-    {
-        if (this.people > 0) {
-            this.people--;
-            if (this.people <= 0) {
-                this.progress = 0;
-                clearInterval(this.timer);
-                this.timer = null;
-            }
-            else {
-                this.startTimer();
-            }
-        }
+        */
     }
 }
 
@@ -155,12 +144,6 @@ window.availableTechs = [
     new Project("tech", 2, 'mining', 'Mining'),
 ];
 
-window.availableBuildings = [
-    new Project("building", 1, 'house', 'House'),
-    new Project("building", 2, 'lumber-yard', 'Lumber Yard'),
-    new Project("building", 3, 'nuke-silo', 'Nuke Silo'),
-];
-
 window.reports = [
     new Report(1, Date.now(), "Hello", "normal"),
     new Report(2, Date.now(), "World", "warning"),
@@ -174,6 +157,11 @@ function addReport(id, time, message, type="normal")
     reports.unshift(new Report(id, time, message, type));
 }
 
+function updateResources(name, quantity)
+{
+    window.civ[name] = quantity;
+}
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -181,15 +169,13 @@ const app = new Vue({
 
         availableTechs: window.availableTechs,
 
-        availableBuildings: window.availableBuildings,
-
         reports: window.reports,
 
         resources: [
-            new Resource(1, 5, 'people', 'People', 'Reproduce'),
-            new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'),
-            new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'),
-            new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium'),
+            new Resource(1, 'people', 'People', 'Recruit'),
+            new Resource(2, 'wood', 'Wood', 'Gather Wood'),
+            new Resource(3, 'metal', 'Metal', 'Mine Ore'),
+            new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium'),
         ],
     },
     components: {

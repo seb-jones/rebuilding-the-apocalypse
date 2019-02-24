@@ -1,7 +1,5 @@
 <template>
     <div class=''>
-        <p>Unassigned People: {{ civ.people }}</p>
-
         <recurring-assignment v-for='resource in resources' :key='resource.id' :resource='resource'></recurring-assignment>
     </div>
 </template>

@@ -1771,6 +1771,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    civ: Object,
     resources: Array
   }
 });
@@ -1843,7 +1844,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     resource: Object
@@ -1851,9 +1851,6 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     progressStyle: function progressStyle() {
       return "width: " + this.resource.progress + "%";
-    },
-    peopleLabel: function peopleLabel() {
-      return " [" + this.resource.people + "]";
     }
   }
 });
@@ -1870,8 +1867,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _assignments_RecurringAssignment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../assignments/RecurringAssignment */ "./resources/js/components/assignments/RecurringAssignment.vue");
-//
-//
 //
 //
 //
@@ -36966,7 +36961,7 @@ var render = function() {
     { staticClass: "resource-bar" },
     _vm._l(_vm.resources, function(resource) {
       return _c("li", { key: resource.id }, [
-        _vm._v(_vm._s(resource.label) + ": " + _vm._s(resource.quantity))
+        _vm._v(_vm._s(resource.label) + ": " + _vm._s(_vm.civ[resource.name]))
       ])
     }),
     0
@@ -37067,60 +37062,47 @@ var render = function() {
   return _c("div", {}, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-8" }, [
-        _c("p", [
-          _vm._v(_vm._s(_vm.resource.assignmentLabel) + _vm._s(_vm.peopleLabel))
-        ])
+        _c("p", [_vm._v(_vm._s(_vm.resource.assignmentLabel))])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "col-4" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-dark",
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.resource.incrementPeople($event)
-              }
-            }
-          },
-          [_vm._v("+")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-dark",
-            attrs: { type: "button", disabled: _vm.resource.people <= 0 },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.resource.decrementPeople($event)
-              }
-            }
-          },
-          [_vm._v("-")]
-        )
+        _vm.resource.progress == 0
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-dark",
+                attrs: { type: "button", disabled: _vm.resource.progress > 0 },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.resource.startTimer($event)
+                  }
+                }
+              },
+              [_vm._v("Start")]
+            )
+          : _vm._e()
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "progress" }, [
-      _c(
-        "div",
-        {
-          staticClass: "progress-bar",
-          style: _vm.progressStyle,
-          attrs: {
-            role: "progressbar",
-            "aria-valuenow": _vm.resource.progress,
-            "aria-valuemin": "0",
-            "aria-valuemax": "100"
-          }
-        },
-        [_vm._v(_vm._s(_vm.resource.progress))]
-      )
-    ]),
+    _vm.resource.progress > 0
+      ? _c("div", { staticClass: "progress" }, [
+          _c(
+            "div",
+            {
+              staticClass: "progress-bar",
+              style: _vm.progressStyle,
+              attrs: {
+                role: "progressbar",
+                "aria-valuenow": _vm.resource.progress,
+                "aria-valuemin": "0",
+                "aria-valuemax": "100"
+              }
+            },
+            [_vm._v(_vm._s(_vm.resource.progress))]
+          )
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _c("br")
   ])
@@ -37150,17 +37132,13 @@ var render = function() {
   return _c(
     "div",
     {},
-    [
-      _c("p", [_vm._v("Unassigned People: " + _vm._s(_vm.civ.people))]),
-      _vm._v(" "),
-      _vm._l(_vm.resources, function(resource) {
-        return _c("recurring-assignment", {
-          key: resource.id,
-          attrs: { resource: resource }
-        })
+    _vm._l(_vm.resources, function(resource) {
+      return _c("recurring-assignment", {
+        key: resource.id,
+        attrs: { resource: resource }
       })
-    ],
-    2
+    }),
+    1
   )
 }
 var staticRenderFns = []
@@ -49383,13 +49361,21 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), // TODO speed
-      200);
+      this.progress = 100;
+      this.tick();
+      /*
+      if (this.timer)
+          clearInterval(this.timer);
+       this.timer = setInterval(
+          (function(self) {
+              return function() {
+                  self.tick();
+              }
+          })(this),
+           // TODO speed
+          20
+      );
+      */
     }
   }]);
 
@@ -49399,16 +49385,14 @@ function () {
 var Resource =
 /*#__PURE__*/
 function () {
-  function Resource(id, quantity, name, label, assignmentLabel) {
+  function Resource(id, name, label, assignmentLabel) {
     _classCallCheck(this, Resource);
 
     this.id = id;
-    this.quantity = quantity;
     this.name = name;
     this.label = label;
     this.assignmentLabel = assignmentLabel;
     this.progress = 0;
-    this.people = 0;
     this.timer = null;
   }
 
@@ -49418,46 +49402,36 @@ function () {
       this.progress++;
 
       if (this.progress >= 100) {
-        this.quantity++;
         this.progress = 0;
+        clearInterval(this.timer);
+        this.timer = null;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/increment', {
+          name: this.name
+        }).then(function (response) {
+          updateResources(response.data.name, response.data.quantity);
+        }).catch(function (error) {
+          console.log(error);
+        });
       }
     } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
 
   }, {
     key: "startTimer",
     value: function startTimer() {
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), 200 / this.people);
-    }
-  }, {
-    key: "incrementPeople",
-    value: function incrementPeople() {
-      this.people++;
-
-      if (this.timer === null) {
-        this.progress = 0;
-      }
-
-      this.startTimer();
-    }
-  }, {
-    key: "decrementPeople",
-    value: function decrementPeople() {
-      if (this.people > 0) {
-        this.people--;
-
-        if (this.people <= 0) {
-          this.progress = 0;
+      this.progress = 100;
+      this.tick();
+      /*
+      if (this.timer)
           clearInterval(this.timer);
-          this.timer = null;
-        } else {
-          this.startTimer();
-        }
-      }
+       this.timer = setInterval(
+          (function(self) {
+              return function() {
+                  self.tick();
+              }
+          })(this),
+           20, // TODO resource duration
+      );
+      */
     }
   }]);
 
@@ -49480,7 +49454,6 @@ var Report = function Report(id, time, message, type) {
  // Global Variables
 
 window.availableTechs = [new Project("tech", 1, 'farming', 'Farming'), new Project("tech", 2, 'mining', 'Mining')];
-window.availableBuildings = [new Project("building", 1, 'house', 'House'), new Project("building", 2, 'lumber-yard', 'Lumber Yard'), new Project("building", 3, 'nuke-silo', 'Nuke Silo')];
 window.reports = [new Report(1, Date.now(), "Hello", "normal"), new Report(2, Date.now(), "World", "warning"), new Report(3, Date.now(), "Uh oh", "error"), new Report(4, Date.now(), "Banana Hammock", "normal")]; // Global Functions
 
 function addReport(id, time, message) {
@@ -49488,14 +49461,17 @@ function addReport(id, time, message) {
   reports.unshift(new Report(id, time, message, type));
 }
 
+function updateResources(name, quantity) {
+  window.civ[name] = quantity;
+}
+
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {
     civ: window.civ,
     availableTechs: window.availableTechs,
-    availableBuildings: window.availableBuildings,
     reports: window.reports,
-    resources: [new Resource(1, 5, 'people', 'People', 'Reproduce'), new Resource(2, 0, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 0, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 0, 'uranium', 'Uranium', 'Enrich Uranium')]
+    resources: [new Resource(1, 'people', 'People', 'Recruit'), new Resource(2, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium')]
   },
   components: {
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],
