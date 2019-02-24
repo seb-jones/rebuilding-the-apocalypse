@@ -37,7 +37,7 @@ addEventListener('load', function () {
     }
 });
 
-playAudio('background', true);
+//playAudio('background', true);
 
 class Project 
 {

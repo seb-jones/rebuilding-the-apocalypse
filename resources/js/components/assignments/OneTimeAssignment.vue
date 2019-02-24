@@ -1,15 +1,13 @@
 <template>
     <div class=''>
         <div class='row'>
-            <div class='col-8'>
-                <p>{{ project.label }}</p>
-            </div>
-            <div class='col-4'>
-                <button v-if="project.progress == 0" type="button" class="btn btn-dark" @click.prevent='project.startTimer' :disabled="(project.progress > 0 || !canStart)">Start</button>
+            <div class='col-12'>
+                <p class='float-left'>{{ project.label }}</p>
+                <button v-if="project.progress == 0" type="button" class="float-right btn btn-dark" @click.prevent='project.startTimer' :disabled="(project.progress > 0 || !canStart)">Start</button>
             </div>
 
-            <div class='col-12'>
-                <p>Requirements:</p>
+            <div class='requirements col-12'>
+                <h3>Requirements:</h3>
                 <p v-for="resource in resources" :key="resource.id">{{ resource.label }}: {{ project[resource.name] }}</p>
             </div>
 
@@ -22,7 +20,6 @@
                 </div>
             </div>
         </div>
-        <br>
     </div>
 </template>
 

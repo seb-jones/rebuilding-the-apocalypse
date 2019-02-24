@@ -1,23 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-full">
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <h2>Resources</h2>
             <materials-panel :resources='resources' :civ='civ'></materials-panel>
 
-            <h2>Research</h2>
-            <project-panel :projects='availableTechs' :resources='resources'></project-panel>
-
-            <div v-if='completedTechs.length > 0' class='completed-techs'>
-                    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Toggle Completed Research</button>
-                <div class="collapse" id="collapseExample">
-                    <ul>
-                        <li v-for="t in completedTechs" :key="t.id">@{{ t.label }}</li>
-                    </ul>
-                </div>
-            </div>
+            <h2 class='mt-3'>Research</h2>
+            <project-panel :completed-techs="completedTechs" :projects='availableTechs' :resources='resources'></project-panel>
         </div>
         <div class='col-md-4'>
             <h2>Reports</h2>

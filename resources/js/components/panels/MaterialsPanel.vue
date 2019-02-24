@@ -1,6 +1,6 @@
 <template>
-    <div class=''>
-        <recurring-assignment v-for='resource in resources' :key='resource.id' :resource='resource'></recurring-assignment>
+    <div class='materials-panel panel'>
+        <recurring-assignment class='py-2' v-for='resource in resources' :key='resource.id' :resource='resource'></recurring-assignment>
     </div>
 </template>
 

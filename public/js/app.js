@@ -1812,9 +1812,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     project: Object,
@@ -1852,9 +1849,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
 //
 //
 //
@@ -1927,11 +1921,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     projects: Array,
-    resources: Array
+    resources: Array,
+    completedTechs: Array
   },
   components: {
     OneTimeAssignment: _assignments_OneTimeAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -37017,16 +37023,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", {}, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-8" }, [
-        _c("p", [_vm._v(_vm._s(_vm.project.label))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("p", { staticClass: "float-left" }, [
+          _vm._v(_vm._s(_vm.project.label))
+        ]),
+        _vm._v(" "),
         _vm.project.progress == 0
           ? _c(
               "button",
               {
-                staticClass: "btn btn-dark",
+                staticClass: "float-right btn btn-dark",
                 attrs: {
                   type: "button",
                   disabled: _vm.project.progress > 0 || !_vm.canStart
@@ -37045,9 +37051,9 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "col-12" },
+        { staticClass: "requirements col-12" },
         [
-          _c("p", [_vm._v("Requirements:")]),
+          _c("h3", [_vm._v("Requirements:")]),
           _vm._v(" "),
           _vm._l(_vm.resources, function(resource) {
             return _c("p", { key: resource.id }, [
@@ -37084,9 +37090,7 @@ var render = function() {
             ])
           : _vm._e()
       ])
-    ]),
-    _vm._v(" "),
-    _c("br")
+    ])
   ])
 }
 var staticRenderFns = []
@@ -37113,16 +37117,16 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", {}, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-8" }, [
-        _c("p", [_vm._v(_vm._s(_vm.resource.assignment_label))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("p", { staticClass: "float-left" }, [
+          _vm._v(_vm._s(_vm.resource.assignment_label))
+        ]),
+        _vm._v(" "),
         _vm.resource.progress == 0
           ? _c(
               "button",
               {
-                staticClass: "btn btn-dark",
+                staticClass: "float-right btn btn-dark",
                 attrs: { type: "button", disabled: _vm.resource.progress > 0 },
                 on: {
                   click: function($event) {
@@ -37154,9 +37158,7 @@ var render = function() {
             [_vm._v(_vm._s(_vm.resource.progress))]
           )
         ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("br")
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -37183,10 +37185,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {},
+    { staticClass: "materials-panel panel" },
     _vm._l(_vm.resources, function(resource) {
       return _c("recurring-assignment", {
         key: resource.id,
+        staticClass: "py-2",
         attrs: { resource: resource }
       })
     }),
@@ -37217,17 +37220,62 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {},
-    _vm._l(_vm.projects, function(project) {
-      return _c("one-time-assignment", {
-        key: project.id,
-        attrs: { project: project, resources: _vm.resources }
-      })
-    }),
-    1
+    { staticClass: "project-panel panel" },
+    [
+      _vm._l(_vm.projects, function(project) {
+        return _c("one-time-assignment", {
+          key: project.id,
+          attrs: { project: project, resources: _vm.resources }
+        })
+      }),
+      _vm._v(" "),
+      _vm.completedTechs.length > 0
+        ? _c("div", { staticClass: "completed-techs" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "collapse", attrs: { id: "collapseExample" } },
+              [
+                _c(
+                  "ul",
+                  { staticClass: "mt-3" },
+                  _vm._l(_vm.completedTechs, function(t) {
+                    return _c("li", { key: t.id }, [_vm._v(_vm._s(t.label))])
+                  }),
+                  0
+                )
+              ]
+            )
+          ])
+        : _vm._e()
+    ],
+    2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: {
+            type: "button",
+            "data-toggle": "collapse",
+            "data-target": "#collapseExample",
+            "aria-expanded": "false",
+            "aria-controls": "collapseExample"
+          }
+        },
+        [_vm._v("Toggle Completed Research")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -49391,8 +49439,7 @@ addEventListener('load', function () {
       if (!event.target.disabled) playAudio('hover');
     });
   }
-});
-playAudio('background', true);
+}); //playAudio('background', true);
 
 var Project =
 /*#__PURE__*/
