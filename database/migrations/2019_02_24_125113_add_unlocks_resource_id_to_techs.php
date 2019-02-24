@@ -14,7 +14,7 @@ class AddUnlocksResourceIdToTechs extends Migration
     public function up()
     {
         Schema::table('techs', function (Blueprint $table) {
-            $table->renameColumn('allows_id', 'unlocks_tech_id');
+            $table->unsignedInteger('unlocks_tech_id')->nullable();
             $table->unsignedInteger('unlocks_resource_id')->nullable();
         });
     }
@@ -27,7 +27,7 @@ class AddUnlocksResourceIdToTechs extends Migration
     public function down()
     {
         Schema::table('techs', function (Blueprint $table) {
-            $table->renameColumn('unlocks_tech_id', 'allows_id');
+            $table->dropColumn('unlocks_tech_id');
             $table->dropColumn('unlocks_resource_id');
         });
     }

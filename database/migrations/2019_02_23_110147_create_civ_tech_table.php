@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTechRequirementsTable extends Migration
+class CreateCivTechTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class CreateTechRequirementsTable extends Migration
      */
     public function up()
     {
-        Schema::table('techs', function (Blueprint $table) {
-            $table->unsignedInteger('allows_id')->nullable();
+        Schema::create('civ_tech', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('civ_id');
+            $table->unsignedInteger('tech_id');
         });
     }
 
@@ -25,6 +27,6 @@ class CreateTechRequirementsTable extends Migration
      */
     public function down()
     {
-        $table->dropColumn('allows_id');
+        Schema::dropIfExists('civ_tech');
     }
 }
