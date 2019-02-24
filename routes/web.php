@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('/resources')->group(function () {
         Route::post('/increment', 'ResourceController@increment');
+        Route::post('/pay', 'ResourceController@pay');
     });
 });
 

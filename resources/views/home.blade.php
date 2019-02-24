@@ -8,7 +8,7 @@
             <materials-panel :resources='resources' :civ='civ'></materials-panel>
 
             <h2>Research</h2>
-            <project-panel :projects='availableTechs'></project-panel>
+            <project-panel :projects='availableTechs' :resources='resources'></project-panel>
 
             <div v-if='completedTechs.length > 0' class='completed-techs'>
                 <h2>Completed</h2>

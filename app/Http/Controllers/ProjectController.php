@@ -50,6 +50,5 @@ class ProjectController extends Controller
         }
 
         return response($unlocked, 200);
-        // TODO return unlocked resource as well
     }
 }

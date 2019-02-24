@@ -1805,15 +1805,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    project: Object
+    project: Object,
+    resources: Array
   },
   computed: {
     progressStyle: function progressStyle() {
       return "width: " + this.project.progress + "%";
+    },
+    canStart: function canStart() {
+      var result = true;
+
+      for (var i = 0; i < this.resources.length; ++i) {
+        if (window.civ[this.resources[i].name] < this.project[this.resources[i].name]) {
+          console.log(this.resources.name);
+          result = false;
+          break;
+        }
+      }
+
+      return result;
     }
-  }
+  },
+  methods: {}
 });
 
 /***/ }),
@@ -1905,7 +1930,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    projects: Array
+    projects: Array,
+    resources: Array
   },
   components: {
     OneTimeAssignment: _assignments_OneTimeAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -37001,7 +37027,10 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-dark",
-                attrs: { type: "button", disabled: _vm.project.progress > 0 },
+                attrs: {
+                  type: "button",
+                  disabled: _vm.project.progress > 0 || !_vm.canStart
+                },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -37012,27 +37041,50 @@ var render = function() {
               [_vm._v("Start")]
             )
           : _vm._e()
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-12" },
+        [
+          _c("p", [_vm._v("Requirements:")]),
+          _vm._v(" "),
+          _vm._l(_vm.resources, function(resource) {
+            return _c("p", { key: resource.id }, [
+              _vm._v(
+                _vm._s(resource.label) +
+                  ": " +
+                  _vm._s(_vm.project[resource.name])
+              )
+            ])
+          })
+        ],
+        2
+      )
     ]),
     _vm._v(" "),
-    _vm.project.progress > 0
-      ? _c("div", { staticClass: "progress" }, [
-          _c(
-            "div",
-            {
-              staticClass: "progress-bar",
-              style: _vm.progressStyle,
-              attrs: {
-                role: "progressbar",
-                "aria-valuenow": _vm.project.progress,
-                "aria-valuemin": "0",
-                "aria-valuemax": "100"
-              }
-            },
-            [_vm._v(_vm._s(_vm.project.progress))]
-          )
-        ])
-      : _vm._e(),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-8" }, [
+        _vm.project.progress > 0
+          ? _c("div", { staticClass: "progress" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "progress-bar",
+                  style: _vm.progressStyle,
+                  attrs: {
+                    role: "progressbar",
+                    "aria-valuenow": _vm.project.progress,
+                    "aria-valuemin": "0",
+                    "aria-valuemax": "100"
+                  }
+                },
+                [_vm._v(_vm._s(_vm.project.progress))]
+              )
+            ])
+          : _vm._e()
+      ])
+    ]),
     _vm._v(" "),
     _c("br")
   ])
@@ -37169,7 +37221,7 @@ var render = function() {
     _vm._l(_vm.projects, function(project) {
       return _c("one-time-assignment", {
         key: project.id,
-        attrs: { project: project }
+        attrs: { project: project, resources: _vm.resources }
       })
     }),
     1
@@ -49309,6 +49361,11 @@ var Project =
 /*#__PURE__*/
 function () {
   function Project(id, name, label, time_per_tick) {
+    var people = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
+    var wood = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+    var metal = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
+    var uranium = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 0;
+
     _classCallCheck(this, Project);
 
     this.id = id;
@@ -49317,6 +49374,10 @@ function () {
     this.progress = 0;
     this.timer = null;
     this.time_per_tick = time_per_tick;
+    this.people = people;
+    this.wood = wood;
+    this.metal = metal;
+    this.uranium = uranium;
   }
 
   _createClass(Project, [{
@@ -49344,7 +49405,7 @@ function () {
                 if (unlocked != null) {
                   if (unlocked.tech) {
                     var t = unlocked.tech;
-                    availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick));
+                    availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick, t.people, t.wood, t.metal, t.uranium));
                   }
 
                   if (unlocked.resource) {
@@ -49369,6 +49430,20 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
+      window.civ.people -= this.people;
+      window.civ.wood -= this.wood;
+      window.civ.metal -= this.metal;
+      window.civ.uranium -= this.uranium;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/pay', {
+        people: this.people,
+        wood: this.wood,
+        metal: this.metal,
+        uranium: this.uranium
+      }).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
       this.progress = 100;
       this.tick();
       /*
@@ -49469,7 +49544,7 @@ window.availableTechs = [];
 var techs = window.availableTechsRaw;
 
 for (var i = 0; i < techs.length; ++i) {
-  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
+  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick, techs[i].people, techs[i].wood, techs[i].metal, techs[i].uranium));
 }
 
 window.completedTechs = [];
@@ -49486,7 +49561,6 @@ for (var i = 0; i < resData.length; ++i) {
   window.Resources.push(new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick));
 }
 
-console.log(window.Resources);
 window.reports = [
   /*
   new Report(1, Date.now(), "Hello", "normal"),

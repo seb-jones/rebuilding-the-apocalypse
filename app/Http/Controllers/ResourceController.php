@@ -24,4 +24,17 @@ class ResourceController extends Controller
             return response('No resource name specified', 500);
         }
     }
+
+    public function pay(Request $request)
+    {
+        $civ = Auth::user()->civ;
+
+        $new_resources = [];
+
+        foreach ($request->all() as $k => $v) {
+            $new_resources[$k] = $civ[$k] - $v;
+        }
+
+        $civ->update($new_resources);
+    }
 }

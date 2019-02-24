@@ -21,6 +21,10 @@
                 name: "{{ $tech->name }}",
                 label: "{{ $tech->label }}",
                 time_per_tick: "{{ $tech->time_per_tick }}",
+                people: "{{ $tech->people }}",
+                wood: "{{ $tech->wood }}",
+                metal: "{{ $tech->metal }}",
+                uranium: "{{ $tech->uranium }}",
                 });
             @endforeach
 

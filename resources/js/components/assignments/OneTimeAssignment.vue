@@ -5,12 +5,22 @@
                 <p>{{ project.label }}</p>
             </div>
             <div class='col-4'>
-                <button v-if="project.progress == 0" type="button" class="btn btn-dark" @click.prevent='project.startTimer' :disabled="project.progress > 0">Start</button>
+                <button v-if="project.progress == 0" type="button" class="btn btn-dark" @click.prevent='project.startTimer' :disabled="(project.progress > 0 || !canStart)">Start</button>
             </div>
+
+            <div class='col-12'>
+                <p>Requirements:</p>
+                <p v-for="resource in resources" :key="resource.id">{{ resource.label }}: {{ project[resource.name] }}</p>
+            </div>
+
         </div>
 
-        <div v-if="project.progress > 0" class="progress">
-            <div class="progress-bar" role="progressbar" :style="progressStyle" :aria-valuenow="project.progress" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}</div>
+        <div class='row'>
+            <div class='col-8'>
+                <div v-if="project.progress > 0" class="progress">
+                    <div class="progress-bar" role="progressbar" :style="progressStyle" :aria-valuenow="project.progress" aria-valuemin="0" aria-valuemax="100">{{ project.progress }}</div>
+                </div>
+            </div>
         </div>
         <br>
     </div>
@@ -19,12 +29,28 @@
 <script>
 export default {
     props: {
-        project: Object
+        project: Object,
+        resources: Array
     },
     computed: {
         progressStyle() {
             return "width: " + this.project.progress + "%";
         },
+        canStart() {
+            var result = true;
+
+            for (var i = 0; i < this.resources.length; ++i) {
+                if (window.civ[this.resources[i].name] < this.project[this.resources[i].name]) {
+                    console.log(this.resources.name);
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+    },
+    methods: {
     }
 }
 </script>

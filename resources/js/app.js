@@ -2,7 +2,7 @@ require('./bootstrap');
 
 class Project 
 {
-    constructor(id, name, label, time_per_tick) 
+    constructor(id, name, label, time_per_tick, people = 0, wood = 0, metal = 0, uranium = 0) 
     {
         this.id = id;
         this.name = name;
@@ -10,6 +10,10 @@ class Project
         this.progress = 0;
         this.timer = null;
         this.time_per_tick = time_per_tick;
+        this.people = people;
+        this.wood = wood;
+        this.metal = metal;
+        this.uranium = uranium;
     }
 
     tick() 
@@ -35,7 +39,7 @@ class Project
                                     var t = unlocked.tech;
 
                                     availableTechs.push(
-                                        new Project(t.id, t.name, t.label, t.time_per_tick)
+                                        new Project(t.id, t.name, t.label, t.time_per_tick, t.people, t.wood, t.metal, t.uranium)
                                     );
                                 }
 
@@ -67,6 +71,17 @@ class Project
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
+        window.civ.people -= this.people;
+        window.civ.wood -= this.wood;
+        window.civ.metal -= this.metal;
+        window.civ.uranium -= this.uranium;
+
+        axios.post('/resources/pay', { people: this.people, wood: this.wood, metal: this.metal, uranium: this.uranium }).then(function (response) {
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error);
+        });
+
         this.progress = 100;
         this.tick();
 
@@ -163,7 +178,7 @@ import ProjectPanel from './components/panels/ProjectPanel';
 window.availableTechs = [];
 var techs = window.availableTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
-    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
+    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick, techs[i].people, techs[i].wood, techs[i].metal, techs[i].uranium));
 }
 
 window.completedTechs = [];
@@ -181,8 +196,6 @@ for (var i = 0; i < resData.length; ++i) {
         new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick)
     );
 }
-
-console.log(window.Resources);
 
 window.reports = [
     /*
