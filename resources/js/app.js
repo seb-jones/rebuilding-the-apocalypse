@@ -23,10 +23,15 @@ class Project
             for (var i = 0; i < availableTechs.length; ++i) {
                 if (availableTechs[i].id === this.id) {
                     // remove the item at index i
-                    console.log(availableTechs[i].id);
-
                     axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
-                        console.log(response);
+                        if (response.data) {
+                            var t = response.data;
+                            if (response.data !== null) {
+                                availableTechs.push(
+                                    new Project(t.id, t.name, t.label)
+                                );
+                            }
+                        }
                     }).catch(function (error) {
                         console.log(error);
                     });
@@ -64,7 +69,7 @@ class Project
             20
         );
         */
-    }
+        }
 }
 
 class Resource 
