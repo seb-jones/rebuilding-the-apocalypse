@@ -11,10 +11,7 @@
             <project-panel :projects='availableTechs' :resources='resources'></project-panel>
 
             <div v-if='completedTechs.length > 0' class='completed-techs'>
-                <h2>Completed</h2>
-                <p>
-                    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Toggle Visibility</button>
-                </p>
+                    <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Toggle Completed Research</button>
                 <div class="collapse" id="collapseExample">
                     <ul>
                         <li v-for="t in completedTechs" :key="t.id">@{{ t.label }}</li>
