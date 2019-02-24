@@ -10687,7 +10687,8 @@ body {
 .intelligence-panel {
   border: 3px solid grey;
   padding: 0.75em 1em;
-  height: 60vh;
+  min-height: 51.5vh;
+  max-height: 80vh;
   overflow: auto;
   background-color: black;
   color: #11ee11;
@@ -10715,14 +10716,10 @@ body {
   font-size: 1.25em;
 }
 
-.panel .requirements h3 {
-  font-size: 1.2em;
-}
-
 .panel .requirements p {
-  font-size: 1em;
+  font-size: 1.2em;
   display: block;
   float: left;
-  margin-right: 2em;
+  margin-right: 1.2em;
 }
 

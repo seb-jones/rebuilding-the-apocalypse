@@ -43,7 +43,8 @@ body {
 .intelligence-panel {
     border: 3px solid grey;
     padding: 0.75em 1.0em;
-    height: 60vh;
+    min-height: 51.5vh;
+    max-height: 80vh;
     overflow: auto;
     background-color: black;
     color: #11ee11;
@@ -71,15 +72,11 @@ body {
     }
 
     .requirements {
-        h3 {
-            font-size: 1.2em;
-        }
-
         p {
-            font-size: 1.0em;
+            font-size: 1.2em;
             display: block;
             float: left;
-            margin-right: 2em;
+            margin-right: 1.2em;
         }
     }
 }

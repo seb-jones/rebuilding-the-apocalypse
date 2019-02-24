@@ -7,8 +7,7 @@
             </div>
 
             <div class='requirements col-12'>
-                <h3>Requirements:</h3>
-                <p v-for="resource in resources" :key="resource.id">{{ resource.label }}: {{ project[resource.name] }}</p>
+                <p>Requirements:</p><p v-for="resource in resources" :key="resource.id">{{ resource.label }}: {{ project[resource.name] }}</p>
             </div>
 
         </div>

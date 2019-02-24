@@ -1811,7 +1811,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     project: Object,
@@ -37053,8 +37052,7 @@ var render = function() {
         "div",
         { staticClass: "requirements col-12" },
         [
-          _c("h3", [_vm._v("Requirements:")]),
-          _vm._v(" "),
+          _c("p", [_vm._v("Requirements:")]),
           _vm._l(_vm.resources, function(resource) {
             return _c("p", { key: resource.id }, [
               _vm._v(
@@ -37225,6 +37223,7 @@ var render = function() {
       _vm._l(_vm.projects, function(project) {
         return _c("one-time-assignment", {
           key: project.id,
+          staticClass: "py-2",
           attrs: { project: project, resources: _vm.resources }
         })
       }),

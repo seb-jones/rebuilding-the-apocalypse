@@ -1,6 +1,6 @@
 <template>
     <div class='project-panel panel'>
-        <one-time-assignment v-for="project in projects" :key='project.id' :project='project' :resources='resources'></one-time-assignment>
+        <one-time-assignment class='py-2' v-for="project in projects" :key='project.id' :project='project' :resources='resources'></one-time-assignment>
 
         <div v-if='completedTechs.length > 0' class='completed-techs'>
             <div class='text-center'>
