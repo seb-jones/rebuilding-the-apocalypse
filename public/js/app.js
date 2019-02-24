@@ -49308,7 +49308,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 var Project =
 /*#__PURE__*/
 function () {
-  function Project(id, name, label) {
+  function Project(id, name, label, time_per_tick) {
     _classCallCheck(this, Project);
 
     this.id = id;
@@ -49316,6 +49316,7 @@ function () {
     this.label = label;
     this.progress = 0;
     this.timer = null;
+    this.time_per_tick = time_per_tick;
   }
 
   _createClass(Project, [{
@@ -49338,7 +49339,7 @@ function () {
                 var t = response.data;
 
                 if (response.data !== null) {
-                  availableTechs.push(new Project(t.id, t.name, t.label));
+                  availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick));
                 }
               }
             }).catch(function (error) {
@@ -49357,21 +49358,16 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
+      /*
       this.progress = 100;
       this.tick();
-      /*
-      if (this.timer)
-          clearInterval(this.timer);
-       this.timer = setInterval(
-          (function(self) {
-              return function() {
-                  self.tick();
-              }
-          })(this),
-           // TODO speed
-          20
-      );
       */
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), this.time_per_tick);
     }
   }]);
 
@@ -49381,13 +49377,14 @@ function () {
 var Resource =
 /*#__PURE__*/
 function () {
-  function Resource(id, name, label, assignmentLabel) {
+  function Resource(id, name, label, assignmentLabel, time_per_tick) {
     _classCallCheck(this, Resource);
 
     this.id = id;
     this.name = name;
     this.label = label;
     this.assignmentLabel = assignmentLabel;
+    this.time_per_tick = time_per_tick;
     this.progress = 0;
     this.timer = null;
   }
@@ -49414,20 +49411,16 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
+      /*
       this.progress = 100;
       this.tick();
-      /*
-      if (this.timer)
-          clearInterval(this.timer);
-       this.timer = setInterval(
-          (function(self) {
-              return function() {
-                  self.tick();
-              }
-          })(this),
-           20, // TODO resource duration
-      );
       */
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), this.time_per_tick);
     }
   }]);
 
@@ -49453,14 +49446,14 @@ window.availableTechs = [];
 var techs = window.availableTechsRaw;
 
 for (var i = 0; i < techs.length; ++i) {
-  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
 window.completedTechs = [];
 techs = window.completedTechsRaw;
 
 for (var i = 0; i < techs.length; ++i) {
-  window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+  window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
 window.reports = [
@@ -49488,7 +49481,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     availableTechs: window.availableTechs,
     completedTechs: window.completedTechs,
     reports: window.reports,
-    resources: [new Resource(1, 'people', 'People', 'Recruit'), new Resource(2, 'wood', 'Wood', 'Gather Wood'), new Resource(3, 'metal', 'Metal', 'Mine Ore'), new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium')]
+    resources: [new Resource(1, 'people', 'People', 'Recruit', 50), new Resource(2, 'wood', 'Wood', 'Gather Wood', 10), new Resource(3, 'metal', 'Metal', 'Mine Ore', 100), new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium', 250)]
   },
   components: {
     ResourceBar: _components_ResourceBar__WEBPACK_IMPORTED_MODULE_2__["default"],

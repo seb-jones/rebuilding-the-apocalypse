@@ -20,6 +20,7 @@
                 id: "{{ $tech->pivot->id }}",
                 name: "{{ $tech->name }}",
                 label: "{{ $tech->label }}",
+                time_per_tick: "{{ $tech->time_per_tick }}",
                 });
             @endforeach
 

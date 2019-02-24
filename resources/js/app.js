@@ -2,13 +2,14 @@ require('./bootstrap');
 
 class Project 
 {
-    constructor(id, name, label) 
+    constructor(id, name, label, time_per_tick) 
     {
         this.id = id;
         this.name = name;
         this.label = label;
         this.progress = 0;
         this.timer = null;
+        this.time_per_tick = time_per_tick;
     }
 
     tick() 
@@ -28,7 +29,7 @@ class Project
                             var t = response.data;
                             if (response.data !== null) {
                                 availableTechs.push(
-                                    new Project(t.id, t.name, t.label)
+                                    new Project(t.id, t.name, t.label, t.time_per_tick)
                                 );
                             }
                         }
@@ -51,10 +52,11 @@ class Project
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
+        /*
         this.progress = 100;
         this.tick();
+        */
 
-        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -65,20 +67,19 @@ class Project
                 }
             })(this),
 
-            // TODO speed
-            20
+            this.time_per_tick
         );
-        */
-        }
+    }
 }
 
 class Resource 
 {
-    constructor(id, name, label, assignmentLabel) {
+    constructor(id, name, label, assignmentLabel, time_per_tick) {
         this.id = id;
         this.name = name;
         this.label = label;
         this.assignmentLabel = assignmentLabel;
+        this.time_per_tick = time_per_tick;
         this.progress = 0;
         this.timer = null;
     }
@@ -103,10 +104,11 @@ class Resource
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
+        /*
         this.progress = 100;
         this.tick();
+        */
 
-        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -117,9 +119,8 @@ class Resource
                 }
             })(this),
 
-            20, // TODO resource duration
+            this.time_per_tick
         );
-        */
     }
 }
 
@@ -144,14 +145,14 @@ import ProjectPanel from './components/panels/ProjectPanel';
 window.availableTechs = [];
 var techs = window.availableTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
-    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
 window.completedTechs = [];
 
 techs = window.completedTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
-    window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label));
+    window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
 window.reports = [
@@ -186,10 +187,10 @@ const app = new Vue({
         reports: window.reports,
 
         resources: [
-            new Resource(1, 'people', 'People', 'Recruit'),
-            new Resource(2, 'wood', 'Wood', 'Gather Wood'),
-            new Resource(3, 'metal', 'Metal', 'Mine Ore'),
-            new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium'),
+            new Resource(1, 'people', 'People', 'Recruit', 50),
+            new Resource(2, 'wood', 'Wood', 'Gather Wood', 10),
+            new Resource(3, 'metal', 'Metal', 'Mine Ore', 100),
+            new Resource(4, 'uranium', 'Uranium', 'Enrich Uranium', 250),
         ],
     },
     components: {
