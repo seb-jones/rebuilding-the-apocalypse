@@ -6,6 +6,7 @@ use App\Civ;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -72,6 +73,11 @@ class RegisterController extends Controller
 
         $civ = Civ::create([
             'people' => 4
+        ]);
+
+        DB::table('available_techs')->insert([
+            'civ_id' => $civ->id,
+            'tech_id' => 1,
         ]);
 
         $user->civ_id = $civ->id;

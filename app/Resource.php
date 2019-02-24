@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Resource extends Model
@@ -27,7 +28,7 @@ class Resource extends Model
                 $unlocked[] = $resource;
             }
             else if ($unlocked_by->id) {
-                $result = DB::table('completed_techs')->select('id')->where('id', $unlocked_by->id)->get();
+                $result = DB::table('completed_techs')->select('id')->where('id', $unlocked_by->id)->where('civ_id', Auth::user()->id)->get();
                 if ($result->count() > 0) {
                     $unlocked[] = $resource;
                 }

@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
                 'unlocks_tech_id' => '2',
                 'unlocks_resource_id' => NULL,
             ],
+
             [
                 'name' => 'lumber_jacking',
                 'label' => 'Lumber',
@@ -68,8 +69,56 @@ class DatabaseSeeder extends Seeder
                 'metal' => '0',
                 'uranium' => '0',
                 'time_per_tick' => '100',
-                'unlocks_tech_id' => NULL,
+                'unlocks_tech_id' => '3',
                 'unlocks_resource_id' => '2',
+            ],
+
+            [
+                'name' => 'mining',
+                'label' => 'Mining',
+                'people' => '20',
+                'wood' => '10',
+                'metal' => '0',
+                'uranium' => '0',
+                'time_per_tick' => '200',
+                'unlocks_tech_id' => '4',
+                'unlocks_resource_id' => '3',
+            ],
+
+            [
+                'name' => 'fusion',
+                'label' => 'Nuclear Fusion',
+                'people' => '50',
+                'wood' => '40',
+                'metal' => '20',
+                'uranium' => '0',
+                'time_per_tick' => '500',
+                'unlocks_tech_id' => '4',
+                'unlocks_resource_id' => '4',
+            ],
+
+            [
+                'name' => 'atomics',
+                'label' => 'Atomic Science',
+                'people' => '50',
+                'wood' => '40',
+                'metal' => '20',
+                'uranium' => '0',
+                'time_per_tick' => '500',
+                'unlocks_tech_id' => '5',
+                'unlocks_resource_id' => '4',
+            ],
+
+            [
+                'name' => 'nukes',
+                'label' => 'Nuclear Warheads',
+                'people' => '400',
+                'wood' => '200',
+                'metal' => '100',
+                'uranium' => '50',
+                'time_per_tick' => '1000',
+                'unlocks_tech_id' => NULL,
+                'unlocks_resource_id' => NULL,
             ],
         ]);
     }
