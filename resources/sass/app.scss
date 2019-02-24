@@ -80,3 +80,24 @@ body {
         }
     }
 }
+
+#nuke-overlay {
+    pointer-events: none;
+    background-color: white;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    transition: opacity 0.075s;
+}
+
+.go-transparent {
+    opacity: 0;
+}
+
+.go-opaque {
+    opacity: 1;
+}

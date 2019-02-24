@@ -15,7 +15,7 @@ class CreateCivsTable extends Migration
     {
         Schema::create('civs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('people')->default(0);
+            $table->unsignedInteger('people')->default(4);
             $table->unsignedInteger('wood')->default(0);
             $table->unsignedInteger('metal')->default(0);
             $table->unsignedInteger('uranium')->default(0);

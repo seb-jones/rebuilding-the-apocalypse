@@ -49406,13 +49406,18 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Sounds = {
   background: new Audio('/sfx/background.mp3'),
+  project: new Audio('/sfx/project.mp3'),
   click: new Audio('/sfx/click.mp3'),
   hover: new Audio('/sfx/hover.mp3'),
   metal: new Audio('/sfx/metal.mp3'),
   people: new Audio('/sfx/people.mp3'),
   uranium: new Audio('/sfx/uranium.mp3'),
-  wood: new Audio('/sfx/wood.mp3')
+  wood: new Audio('/sfx/wood.mp3'),
+  explosion: new Audio('/sfx/explosion.mp3')
 };
+window.Sounds.explosion.addEventListener('ended', function () {
+  window.location = "/reset";
+});
 
 function playAudio(name) {
   var loop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -49438,7 +49443,17 @@ addEventListener('load', function () {
       if (!event.target.disabled) playAudio('hover');
     });
   }
-}); //playAudio('background', true);
+
+  document.getElementById('nuke-overlay').style.opacity = 0;
+
+  if (window.civ.has_won) {
+    addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild... again.");
+  } else {
+    addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild...");
+  }
+
+  playAudio('background', true);
+});
 
 var Project =
 /*#__PURE__*/
@@ -49502,6 +49517,7 @@ function () {
             });
             var t = availableTechs.splice(i, 1);
             completedTechs.push(t[0]);
+            playAudio('project');
             break;
           }
         }
@@ -49527,20 +49543,12 @@ function () {
       }).catch(function (error) {
         console.log(error);
       });
-      this.progress = 100;
-      this.tick();
-      /*
-      if (this.timer)
-          clearInterval(this.timer);
-       this.timer = setInterval(
-          (function(self) {
-              return function() {
-                  self.tick();
-              }
-          })(this),
-           this.time_per_tick
-      );
-      */
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), this.time_per_tick);
     }
   }]);
 
@@ -49576,6 +49584,30 @@ function () {
           this.timer = null;
         }
 
+        var msg = null;
+
+        switch (this.name) {
+          case "people":
+            msg = "New person recruited.";
+            break;
+
+          case "wood":
+            msg = "Wood collected.";
+            break;
+
+          case "metal":
+            msg = "Metal mined.";
+            break;
+
+          case "uranium":
+            msg = "Uranium enriched.";
+            break;
+        }
+
+        if (msg) {
+          addReport(Math.random(), Date.now(), msg);
+        }
+
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/increment', {
           name: this.name
         }).then(function (response) {
@@ -49589,20 +49621,12 @@ function () {
   }, {
     key: "startTimer",
     value: function startTimer() {
-      this.progress = 100;
-      this.tick();
-      /*
-      if (this.timer)
-          clearInterval(this.timer);
-       this.timer = setInterval(
-          (function(self) {
-              return function() {
-                  self.tick();
-              }
-          })(this),
-           this.time_per_tick
-      );
-      */
+      if (this.timer) clearInterval(this.timer);
+      this.timer = setInterval(function (self) {
+        return function () {
+          self.tick();
+        };
+      }(this), this.time_per_tick);
     }
   }]);
 
@@ -49645,14 +49669,7 @@ for (var i = 0; i < resData.length; ++i) {
   window.Resources.push(new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick));
 }
 
-window.reports = [
-  /*
-  new Report(1, Date.now(), "Hello", "normal"),
-  new Report(2, Date.now(), "World", "warning"),
-  new Report(3, Date.now(), "Uh oh", "error"),
-  new Report(4, Date.now(), "Banana Hammock", "normal"),
-  */
-]; // Global Functions
+window.reports = []; // Global Functions
 
 function addReport(id, time, message) {
   var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "normal";
@@ -49689,6 +49706,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       }).catch(function (error) {
         console.log(error);
       });
+    },
+    atEndGame: function atEndGame() {
+      return completedTechs.some(function (element) {
+        return element.id === 5;
+      });
+    },
+    win: function win() {
+      window.Sounds.background.pause();
+      window.Sounds.background.currentTime = 0;
+      document.getElementById('nuke-overlay').style.opacity = 1;
+      playAudio("explosion");
     }
   }
 }); // Tick functions

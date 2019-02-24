@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="container-fluid">
+    <div v-if="atEndGame()" class='row'>
+        <div class='col-12 text-center p-3'>
+            <button @click='win' type="button" class="btn btn-danger">Launch Nukes</button>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-7">
             <h2>Resources</h2>

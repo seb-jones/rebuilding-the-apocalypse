@@ -2,13 +2,19 @@ require('./bootstrap');
 
 window.Sounds = {
     background: new Audio('/sfx/background.mp3'),
+    project: new Audio('/sfx/project.mp3'),
     click: new Audio('/sfx/click.mp3'),
     hover: new Audio('/sfx/hover.mp3'),
     metal: new Audio('/sfx/metal.mp3'),
     people: new Audio('/sfx/people.mp3'),
     uranium: new Audio('/sfx/uranium.mp3'),
     wood: new Audio('/sfx/wood.mp3'),
+    explosion: new Audio('/sfx/explosion.mp3'),
 };
+
+window.Sounds.explosion.addEventListener('ended', function() {
+    window.location = "/reset";
+});
 
 function playAudio(name, loop = false) {
     if (loop) {
@@ -35,9 +41,18 @@ addEventListener('load', function () {
                 playAudio('hover');
         });
     }
-});
 
-//playAudio('background', true);
+    document.getElementById('nuke-overlay').style.opacity = 0;
+
+    if (window.civ.has_won) {
+        addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild... again.");
+    }
+    else {
+        addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild...");
+    }
+
+    playAudio('background', true);
+});
 
 class Project 
 {
@@ -99,6 +114,9 @@ class Project
 
                     completedTechs.push(t[0]);
 
+                    
+                    playAudio('project');
+
                     break;
                 }
             }
@@ -121,10 +139,6 @@ class Project
             console.log(error);
         });
 
-        this.progress = 100;
-        this.tick();
-
-        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -137,7 +151,6 @@ class Project
 
             this.time_per_tick
         );
-        */
     }
 }
 
@@ -167,6 +180,18 @@ class Resource
                 this.timer = null;
             }
 
+            var msg = null;
+            switch (this.name) {
+                case "people": msg = "New person recruited."; break;
+                case "wood": msg = "Wood collected."; break;
+                case "metal": msg = "Metal mined."; break;
+                case "uranium": msg = "Uranium enriched."; break;
+            }
+
+            if (msg) {
+                addReport(Math.random(), Date.now(), msg);
+            }
+
             axios.post('/resources/increment', { name: this.name }).then(function (response) {
                 updateResources(response.data.name, response.data.quantity);
             }).catch(function (error) {
@@ -178,10 +203,6 @@ class Resource
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
-        this.progress = 100;
-        this.tick();
-
-        /*
         if (this.timer)
             clearInterval(this.timer);
 
@@ -194,7 +215,6 @@ class Resource
 
             this.time_per_tick
         );
-        */
     }
 }
 
@@ -239,12 +259,6 @@ for (var i = 0; i < resData.length; ++i) {
 }
 
 window.reports = [
-    /*
-    new Report(1, Date.now(), "Hello", "normal"),
-    new Report(2, Date.now(), "World", "warning"),
-    new Report(3, Date.now(), "Uh oh", "error"),
-    new Report(4, Date.now(), "Banana Hammock", "normal"),
-    */
 ];
 
 // Global Functions
@@ -288,6 +302,19 @@ const app = new Vue({
             }).catch(function (error) {
                 console.log(error);
             });
+        },
+
+        atEndGame() {
+            return completedTechs.some(function (element) {
+                return element.id === 5;
+            });
+        },
+
+        win() {
+            window.Sounds.background.pause();
+            window.Sounds.background.currentTime = 0;
+            document.getElementById('nuke-overlay').style.opacity = 1;
+            playAudio("explosion");
         }
     }
 });

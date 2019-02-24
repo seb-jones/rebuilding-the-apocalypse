@@ -28,25 +28,17 @@ class HomeController extends Controller
             'wood' => '0',
             'metal' => '0',
             'uranium' => '0',
+            'has_won' => '1',
         ]);
 
-        DB::table('available_techs')->truncate();
-        DB::table('completed_techs')->truncate();
+        DB::table('available_techs')->where('civ_id', $civ->id)->delete();
+        DB::table('completed_techs')->where('civ_id', $civ->id)->delete();
 
         DB::table('available_techs')->insert([
             'civ_id' => $civ->id,
             'tech_id' => 1
         ]);
 
-        $payload = [
-            'resources' => [
-                'people' => $civ->people,
-                'wood' => $civ->wood,
-                'metal' => $civ->metal,
-                'uranium' => $civ->uranium,
-            ],
-        ];
-
-        return response($payload, 200);
+        return redirect('/');
     }
 }

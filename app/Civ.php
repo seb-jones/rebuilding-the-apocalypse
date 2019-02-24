@@ -11,6 +11,7 @@ class Civ extends Model
         'wood',
         'metal',
         'uranium',
+        'has_won',
     ];
 
     public function user()

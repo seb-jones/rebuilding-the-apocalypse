@@ -109,5 +109,7 @@
             @yield('content')
         </main>
     </div>
+
+    <div id='nuke-overlay' style='opacity: 1;'></div>
 </body>
 </html>

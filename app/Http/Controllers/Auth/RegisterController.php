@@ -71,9 +71,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $civ = Civ::create([
-            'people' => 4
-        ]);
+        $civ = Civ::create();
 
         DB::table('available_techs')->insert([
             'civ_id' => $civ->id,
