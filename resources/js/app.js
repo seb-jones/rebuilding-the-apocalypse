@@ -1,30 +1,43 @@
 require('./bootstrap');
 
-window.Sounds = {
-    background: new Audio('/sfx/background.mp3'),
-    project: new Audio('/sfx/project.mp3'),
-    click: new Audio('/sfx/click.mp3'),
-    hover: new Audio('/sfx/hover.mp3'),
-    metal: new Audio('/sfx/metal.mp3'),
-    people: new Audio('/sfx/people.mp3'),
-    uranium: new Audio('/sfx/uranium.mp3'),
-    wood: new Audio('/sfx/wood.mp3'),
-    explosion: new Audio('/sfx/explosion.mp3'),
-};
-
-window.Sounds.explosion.addEventListener('ended', function() {
-    window.location = "/reset";
-});
-
 function playAudio(name, loop = false) {
-    if (loop) {
-        window.Sounds[name].addEventListener('ended', function() {
-            this.currentTime = 0;
-            this.play();
-        }, false);
-    }
+    try {
+        if (loop) {
+            window.Sounds[name].addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+        }
 
-    window.Sounds[name].play();
+        window.Sounds[name].play();
+    }
+    catch (e) {
+    }
+    finally {
+        return null;
+    }
+}
+
+// Set Up Audio
+try {
+    window.Sounds = {
+        background: new Audio('/sfx/background.mp3'),
+        project: new Audio('/sfx/project.mp3'),
+        click: new Audio('/sfx/click.mp3'),
+        hover: new Audio('/sfx/hover.mp3'),
+        metal: new Audio('/sfx/metal.mp3'),
+        people: new Audio('/sfx/people.mp3'),
+        uranium: new Audio('/sfx/uranium.mp3'),
+        wood: new Audio('/sfx/wood.mp3'),
+        explosion: new Audio('/sfx/explosion.mp3'),
+    };
+
+    window.Sounds.explosion.addEventListener('ended', function() {
+        window.location = "/reset";
+    });
+}
+catch (e) {
+    //
 }
 
 addEventListener('load', function () {
@@ -114,7 +127,7 @@ class Project
 
                     completedTechs.push(t[0]);
 
-                    
+
                     playAudio('project');
 
                     break;
@@ -136,6 +149,7 @@ class Project
         axios.post('/resources/pay', { people: this.people, wood: this.wood, metal: this.metal, uranium: this.uranium }).then(function (response) {
             console.log(response);
         }).catch(function (error) {
+            console.log("RESOURCE/PAY ERROR: ");
             console.log(error);
         });
 
@@ -195,6 +209,7 @@ class Resource
             axios.post('/resources/increment', { name: this.name }).then(function (response) {
                 updateResources(response.data.name, response.data.quantity);
             }).catch(function (error) {
+                console.log("RESOURCES/INCREMENT ERROR");
                 console.log(error);
             });
         }
@@ -293,13 +308,12 @@ const app = new Vue({
     methods: {
         reset() {
             axios.post('/reset').then(function (response) {
-                console.log(response.data.availableTechs);
-
                 var resources = response.data.resources;
                 for (var key in resources) {
                     updateResources(key, resources[key]);
                 }
             }).catch(function (error) {
+                console.log('/RESET ERROR');
                 console.log(error);
             });
         },
@@ -314,18 +328,16 @@ const app = new Vue({
             window.Sounds.background.pause();
             window.Sounds.background.currentTime = 0;
             document.getElementById('nuke-overlay').style.opacity = 1;
-            playAudio("explosion");
+
+            try {
+                playAudio("explosion") === null;
+            }
+            catch (e) {
+                //
+            }
+            finally {
+                window.location = "/reset";
+            }
         }
     }
 });
-
-// Tick functions
-//setInterval(sync_with_server, 1000);
-
-function sync_with_server() {
-    axios.post('/tick').then(function (response) {
-        console.log(response);
-    }).catch(function (error) {
-        console.log(error);
-    });
-}
