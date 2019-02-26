@@ -12,7 +12,7 @@ class ProjectController extends Controller
     public function complete(Request $request)
     {
         $src = DB::table('available_techs')
-            ->where ('id', $request->id)
+            ->where ('id', request('id'))
             ->select(['id', 'civ_id', 'tech_id'])
             ->first();
 
@@ -24,7 +24,7 @@ class ProjectController extends Controller
             ]);
 
         DB::table('available_techs')
-            ->where('id', $request->id)
+            ->where('id', request('id'))
             ->delete();
 
         $tech = Tech::find($src->tech_id);
@@ -33,7 +33,7 @@ class ProjectController extends Controller
 
         $unlocked_tech = $tech->unlocks_tech;
 
-        if ($unlocked_tech) {
+        if ($unlocked_tech !== null) {
             DB::table('available_techs')
                 ->insert([
                     'civ_id' => $src->civ_id,
@@ -45,7 +45,7 @@ class ProjectController extends Controller
 
         $unlocked_resource = $tech->unlocks_resource;
 
-        if ($unlocked_resource) {
+        if ($unlocked_resource !== null) {
             $unlocked['resource'] = $unlocked_resource;
         }
 

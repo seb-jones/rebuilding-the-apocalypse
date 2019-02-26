@@ -49404,6 +49404,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+window.AvailableTechIndex = -1;
+
 function playAudio(name) {
   var loop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -49501,7 +49503,7 @@ function () {
 
         for (var i = 0; i < availableTechs.length; ++i) {
           if (availableTechs[i].id === this.id) {
-            // remove the item at index i
+            window.AvailableTechIndex = i;
             axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/projects/complete', {
               id: availableTechs[i].id
             }).then(function (response) {
@@ -49520,12 +49522,13 @@ function () {
                   }
                 }
               }
+
+              var t = availableTechs.splice(window.AvailableTechIndex, 1);
+              completedTechs.push(t[0]);
+              playAudio('project');
             }).catch(function (error) {
               console.log(error);
             });
-            var t = availableTechs.splice(i, 1);
-            completedTechs.push(t[0]);
-            playAudio('project');
             break;
           }
         }
@@ -49729,10 +49732,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
 
       try {
         playAudio("explosion") === null;
-      } catch (e) {//
-      } finally {
+      } catch (e) {
+        //
         window.location = "/reset";
-      }
+      } finally {}
     }
   }
 });

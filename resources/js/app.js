@@ -1,5 +1,7 @@
 require('./bootstrap');
 
+window.AvailableTechIndex = -1;
+
 function playAudio(name, loop = false) {
     try {
         if (loop) {
@@ -97,7 +99,8 @@ class Project
 
             for (var i = 0; i < availableTechs.length; ++i) {
                 if (availableTechs[i].id === this.id) {
-                    // remove the item at index i
+                    window.AvailableTechIndex = i;
+
                     axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
                         if (response.data) {
                             var unlocked = response.data;
@@ -119,16 +122,14 @@ class Project
                                 }
                             }
                         }
+
+                        var t = availableTechs.splice(window.AvailableTechIndex, 1);
+                        completedTechs.push(t[0]);
+
+                        playAudio('project');
                     }).catch(function (error) {
                         console.log(error);
                     });
-
-                    var t = availableTechs.splice(i, 1);
-
-                    completedTechs.push(t[0]);
-
-
-                    playAudio('project');
 
                     break;
                 }
@@ -334,9 +335,9 @@ const app = new Vue({
             }
             catch (e) {
                 //
+                window.location = "/reset";
             }
             finally {
-                window.location = "/reset";
             }
         }
     }
