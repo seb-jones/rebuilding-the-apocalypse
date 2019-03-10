@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeTechsTableToHaveRequirements extends Migration
+class ChangeResearchesTableToHaveRequirements extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ChangeTechsTableToHaveRequirements extends Migration
      */
     public function up()
     {
-        Schema::table('techs', function (Blueprint $table) {
+        Schema::table('researches', function (Blueprint $table) {
             $table->dropColumn('cost_in_people');
             $table->dropColumn('image');
             $table->dropColumn('created_at');
@@ -34,7 +34,7 @@ class ChangeTechsTableToHaveRequirements extends Migration
      */
     public function down()
     {
-        Schema::table('techs', function (Blueprint $table) {
+        Schema::table('researches', function (Blueprint $table) {
             $table->unsignedInteger('cost_in_people');
             $table->string('image');
             $table->timestamps();

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompletedTechesTable extends Migration
+class CreateResearchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateCompletedTechesTable extends Migration
      */
     public function up()
     {
-        Schema::create('completed_techs', function (Blueprint $table) {
+        Schema::create('researches', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('civ_id');
-            $table->unsignedInteger('tech_id');
+            $table->string('name');
+            $table->string('image');
+            $table->unsignedInteger('cost_in_people');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +29,6 @@ class CreateCompletedTechesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('completed_techs');
+        Schema::dropIfExists('researches');
     }
 }

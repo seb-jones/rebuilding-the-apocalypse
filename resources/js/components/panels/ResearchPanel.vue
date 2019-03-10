@@ -1,6 +1,6 @@
 <template>
     <div class='project-panel panel'>
-        <one-time-assignment class='py-2' v-for="project in projects" :key='project.id' :project='project' :resources='resources'></one-time-assignment>
+        <research-assignment class='py-2' v-for="project in projects" :key='project.id' :project='project' :resources='resources'></research-assignment>
 
         <div v-if='completedTechs.length > 0' class='completed-techs'>
             <div class='text-center'>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import OneTimeAssignment from '../assignments/OneTimeAssignment';
+import ResearchAssignment from '../assignments/ResearchAssignment';
 
 export default {
     props: {
@@ -25,7 +25,7 @@ export default {
         completedTechs: Array,
     },
     components: {
-        OneTimeAssignment
+        ResearchAssignment
     }
 }
 </script>

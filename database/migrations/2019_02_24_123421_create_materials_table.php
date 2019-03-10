@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAvailableTechesTable extends Migration
+class CreateMaterialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateAvailableTechesTable extends Migration
      */
     public function up()
     {
-        Schema::create('available_techs', function (Blueprint $table) {
+        Schema::create('materials', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('civ_id');
-            $table->unsignedInteger('tech_id');
+            $table->string('name');
+            $table->string('label');
+            $table->string('assignment_label');
+            $table->string('time_per_tick');
         });
     }
 
@@ -27,6 +29,6 @@ class CreateAvailableTechesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('available_techs');
+        Schema::dropIfExists('materials');
     }
 }

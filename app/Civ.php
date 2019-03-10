@@ -19,14 +19,14 @@ class Civ extends Model
         return $this->hasOne('App\User');
     }
 
-    public function completedTechs()
+    public function completedResearches()
     {
-        return $this->belongsToMany('App\Tech', 'completed_techs');
+        return $this->belongsToMany('App\Researches', 'completed_researches');
     }
 
-    public function availableTechs()
+    public function availableResearches()
     {
-        return $this->belongsToMany('App\Tech', 'available_techs')
+        return $this->belongsToMany('App\Researches', 'available_researches')
             ->withPivot('id');
     }
 }

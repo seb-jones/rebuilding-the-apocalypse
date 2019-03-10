@@ -247,9 +247,9 @@ class Report
 
 import axios from 'axios';
 import Vue from 'vue';
-import ResourceBar from './components/ResourceBar';
+import MaterialsBar from './components/MaterialsBar';
 import MaterialsPanel from './components/panels/MaterialsPanel';
-import ProjectPanel from './components/panels/ProjectPanel';
+import ResearchPanel from './components/panels/ResearchPanel';
 
 // Global Variables
 window.availableTechs = [];
@@ -301,11 +301,13 @@ const app = new Vue({
 
         resources: window.Resources,
     },
+
     components: {
-        ResourceBar,
+        MaterialsBar,
         MaterialsPanel,
-        ProjectPanel,
+        ResearchPanel,
     },
+
     methods: {
         reset() {
             axios.post('/reset').then(function (response) {

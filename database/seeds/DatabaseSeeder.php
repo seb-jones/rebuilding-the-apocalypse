@@ -12,10 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        factory(App\User::class, 1)->create();
+
         //
         // Resources
         //
-        DB::table('resources')->insert([
+        DB::table('materials')->insert([
             [
                 'name' => 'people',
                 'label' => 'People',
@@ -48,7 +50,7 @@ class DatabaseSeeder extends Seeder
         //
         // Techs
         //
-        DB::table('techs')->insert([
+        DB::table('researches')->insert([
             [
                 'name' => 'farming',
                 'label' => 'Farming',
@@ -57,8 +59,8 @@ class DatabaseSeeder extends Seeder
                 'metal' => '0',
                 'uranium' => '0',
                 'time_per_tick' => '20',
-                'unlocks_tech_id' => '2',
-                'unlocks_resource_id' => NULL,
+                'unlocks_research_id' => '2',
+                'unlocks_material_id' => NULL,
             ],
 
             [
@@ -69,8 +71,8 @@ class DatabaseSeeder extends Seeder
                 'metal' => '0',
                 'uranium' => '0',
                 'time_per_tick' => '30',
-                'unlocks_tech_id' => '3',
-                'unlocks_resource_id' => '2',
+                'unlocks_research_id' => '3',
+                'unlocks_material_id' => '2',
             ],
 
             [
@@ -81,8 +83,8 @@ class DatabaseSeeder extends Seeder
                 'metal' => '0',
                 'uranium' => '0',
                 'time_per_tick' => '40',
-                'unlocks_tech_id' => '4',
-                'unlocks_resource_id' => '3',
+                'unlocks_research_id' => '4',
+                'unlocks_material_id' => '3',
             ],
 
             [
@@ -93,8 +95,8 @@ class DatabaseSeeder extends Seeder
                 'metal' => '2',
                 'uranium' => '0',
                 'time_per_tick' => '50',
-                'unlocks_tech_id' => '5',
-                'unlocks_resource_id' => '4',
+                'unlocks_research_id' => '5',
+                'unlocks_material_id' => '4',
             ],
 
             [
@@ -105,8 +107,8 @@ class DatabaseSeeder extends Seeder
                 'metal' => '5',
                 'uranium' => '3',
                 'time_per_tick' => '70',
-                'unlocks_tech_id' => NULL,
-                'unlocks_resource_id' => NULL,
+                'unlocks_research_id' => NULL,
+                'unlocks_material_id' => NULL,
             ],
         ]);
     }

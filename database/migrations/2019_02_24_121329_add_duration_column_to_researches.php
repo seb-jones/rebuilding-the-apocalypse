@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResourcesTable extends Migration
+class AddDurationColumnToResearches extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateResourcesTable extends Migration
      */
     public function up()
     {
-        Schema::create('resources', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('label');
-            $table->string('assignment_label');
-            $table->string('time_per_tick');
+        Schema::table('researches', function (Blueprint $table) {
+            $table->unsignedInteger('time_per_tick');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateResourcesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('resources');
+        Schema::table('researches', function (Blueprint $table) {
+            $table->dropColumn('time_per_tick');
+        });
     }
 }

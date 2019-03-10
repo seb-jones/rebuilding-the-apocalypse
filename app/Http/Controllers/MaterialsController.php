@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ResourceController extends Controller
+class MaterialsController extends Controller
 {
     public function increment(Request $request)
     {
@@ -21,7 +21,7 @@ class ResourceController extends Controller
                 'quantity' => $quantity], 200);
         }
         else {
-            return response('No resource name specified', 500);
+            return response('No material name specified', 500);
         }
     }
 
@@ -29,12 +29,12 @@ class ResourceController extends Controller
     {
         $civ = Auth::user()->civ;
 
-        $new_resources = [];
+        $new_materials = [];
 
         foreach ($request->all() as $k => $v) {
-            $new_resources[$k] = $civ[$k] - $v;
+            $new_materials[$k] = $civ[$k] - $v;
         }
 
-        $civ->update($new_resources);
+        $civ->update($new_materials);
     }
 }

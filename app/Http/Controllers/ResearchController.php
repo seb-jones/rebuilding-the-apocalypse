@@ -7,43 +7,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class ProjectController extends Controller
+class ResearchController extends Controller
 {
     public function complete(Request $request)
     {
-        $src = DB::table('available_techs')
+        $src = DB::table('available_researches')
             ->where ('id', request('id'))
-            ->select(['id', 'civ_id', 'tech_id'])
+            ->select(['id', 'civ_id', 'research_id'])
             ->first();
 
-        DB::table('completed_techs')
+        DB::table('completed_researches')
             ->insert([
                 'id' => $src->id,
                 'civ_id' => $src->civ_id,
-                'tech_id' => $src->tech_id,
+                'research_id' => $src->research_id,
             ]);
 
-        DB::table('available_techs')
+        DB::table('available_researches')
             ->where('id', request('id'))
             ->delete();
 
-        $tech = Tech::find($src->tech_id);
+        $research = Tech::find($src->research_id);
 
         $unlocked = [];
 
-        $unlocked_tech = $tech->unlocks_tech;
+        $unlocked_research = $research->unlocks_research;
 
-        if ($unlocked_tech !== null) {
-            DB::table('available_techs')
+        if ($unlocked_research !== null) {
+            DB::table('available_researches')
                 ->insert([
                     'civ_id' => $src->civ_id,
-                    'tech_id' => $unlocked_tech->id,
+                    'research_id' => $unlocked_research->id,
                 ]);
 
-            $unlocked['tech'] = $unlocked_tech;
+            $unlocked['research'] = $unlocked_research;
         }
 
-        $unlocked_resource = $tech->unlocks_resource;
+        $unlocked_resource = $research->unlocks_material;
 
         if ($unlocked_resource !== null) {
             $unlocked['resource'] = $unlocked_resource;

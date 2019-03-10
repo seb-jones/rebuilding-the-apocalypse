@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDurationColumnToTechs extends Migration
+class CreateAvailableResearchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AddDurationColumnToTechs extends Migration
      */
     public function up()
     {
-        Schema::table('techs', function (Blueprint $table) {
-            $table->unsignedInteger('time_per_tick');
+        Schema::create('available_researches', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('civ_id');
+            $table->unsignedInteger('research_id');
         });
     }
 
@@ -25,8 +27,6 @@ class AddDurationColumnToTechs extends Migration
      */
     public function down()
     {
-        Schema::table('techs', function (Blueprint $table) {
-            $table->dropColumn('time_per_tick');
-        });
+        Schema::dropIfExists('available_researches');
     }
 }

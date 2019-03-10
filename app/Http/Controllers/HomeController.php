@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\AvailableTech;
-use App\CompletedTech;
-use App\Resource;
+use App\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +13,7 @@ class HomeController extends Controller
     {
         return view('home')
             ->withCiv(Auth::user()->civ)
-            ->with(['resourceData' => Resource::getUnlocked()]);
+            ->with(['materialData' => Material::getUnlocked()]);
     }
 
     public function reset()
@@ -31,12 +29,12 @@ class HomeController extends Controller
             'has_won' => '1',
         ]);
 
-        DB::table('available_techs')->where('civ_id', $civ->id)->delete();
-        DB::table('completed_techs')->where('civ_id', $civ->id)->delete();
+        DB::table('available_researches')->where('civ_id', $civ->id)->delete();
+        DB::table('completed_researches')->where('civ_id', $civ->id)->delete();
 
-        DB::table('available_techs')->insert([
+        DB::table('available_researches')->insert([
             'civ_id' => $civ->id,
-            'tech_id' => 1
+            'research_id' => 1
         ]);
 
         return redirect('/');
