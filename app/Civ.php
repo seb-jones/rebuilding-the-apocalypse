@@ -21,12 +21,12 @@ class Civ extends Model
 
     public function completedResearches()
     {
-        return $this->belongsToMany('App\Researches', 'completed_researches');
+        return $this->belongsToMany('App\Research', 'completed_researches');
     }
 
     public function availableResearches()
     {
-        return $this->belongsToMany('App\Researches', 'available_researches')
+        return $this->belongsToMany('App\Research', 'available_researches')
             ->withPivot('id');
     }
 }

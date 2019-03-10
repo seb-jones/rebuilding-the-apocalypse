@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\DB;
 
 class ResearchController extends Controller
 {
+    public function getAvailable()
+    {
+        return Auth::user()->civ->availableResearches;
+    }
+
     public function complete(Request $request)
     {
         $src = DB::table('available_researches')

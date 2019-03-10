@@ -293,8 +293,42 @@ function updateResources(name, quantity)
     window.Civ[name] = quantity;
 }
 
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({
+    state: {
+        researches: [],
+        completedResearches: [],
+    },
+    mutations: {
+        updateResearch (state, researches) {
+            state.researches = researches;
+        },
+    },
+    actions: {
+        completeResearch (state, research) {
+            /*
+            axios.post('/research/complete', {id: research.id}).then(response => 
+                let index = state.researches.findIndex(element => {
+                    return element.id === research.id;
+                });
+
+                let completedResearch = state.researches[index];
+
+                state.researches.splice(index, 1);
+
+                state.completedResearches.push(completedResearch);
+            )
+                */
+        },
+    }
+});
+
 const app = new Vue({
     el: '#app',
+    store, 
     data: {
         civ: window.Civ,
         reports: window.reports,
@@ -304,6 +338,12 @@ const app = new Vue({
         MaterialsBar,
         MaterialsPanel,
         ResearchPanel,
+    },
+
+    created() {
+        axios.get('/research/').then(response => {
+            this.$store.commit('updateResearch', response.data);
+        });
     },
 
     methods: {

@@ -24,11 +24,13 @@ export default {
     components: {
         ResearchAssignment
     },
-    data() {
-        return {
-            researches: [],
-            completedResearches: [],
-        }
-    }
+    computed: {
+        researches() {
+            return this.$store.state.researches;
+        },
+        completedResearches() {
+            return this.$store.state.completedResearches;
+        },
+    },
 }
 </script>

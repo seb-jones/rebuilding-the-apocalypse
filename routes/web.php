@@ -17,13 +17,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/tick', 'TickController@tick')->name('tick');
 
-    Route::prefix('/projects')->group(function () {
-        Route::post('/complete', 'ProjectController@complete');
+    Route::prefix('/research')->group(function () {
+        Route::get('/', 'ResearchController@getAvailable');
+        Route::post('/complete', 'ResearchController@complete');
     });
 
-    Route::prefix('/resources')->group(function () {
-        Route::post('/increment', 'ResourceController@increment');
-        Route::post('/pay', 'ResourceController@pay');
+    Route::prefix('/materials')->group(function () {
+        Route::post('/increment', 'MaterialsController@increment');
+        Route::post('/pay', 'MaterialsController@pay');
     });
 });
 
