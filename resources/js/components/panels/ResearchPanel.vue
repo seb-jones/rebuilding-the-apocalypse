@@ -1,14 +1,14 @@
 <template>
     <div class='project-panel panel'>
-        <research-assignment class='py-2' v-for="project in projects" :key='project.id' :project='project' :resources='resources'></research-assignment>
+        <research-assignment class='py-2' v-for="research in researches" :key='research.id' :research='research'></research-assignment>
 
-        <div v-if='completedTechs.length > 0' class='completed-techs'>
+        <div v-if='completedResearches.length > 0' class='completed-researches'>
             <div class='text-center'>
                 <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Toggle Completed Research</button>
             </div>
             <div class="collapse" id="collapseExample">
                 <ul class='mt-3'>
-                    <li v-for="t in completedTechs" :key="t.id">{{ t.label }}</li>
+                    <li v-for="t in completedResearches" :key="t.id">{{ t.label }}</li>
                 </ul>
             </div>
         </div>
@@ -20,12 +20,15 @@ import ResearchAssignment from '../assignments/ResearchAssignment';
 
 export default {
     props: {
-        projects: Array,
-        resources: Array,
-        completedTechs: Array,
     },
     components: {
         ResearchAssignment
+    },
+    data() {
+        return {
+            researches: [],
+            completedResearches: [],
+        }
     }
 }
 </script>

@@ -14,6 +14,7 @@ function playAudio(name, loop = false) {
         window.Sounds[name].play();
     }
     catch (e) {
+        //
     }
     finally {
         return null;
@@ -59,7 +60,7 @@ addEventListener('load', function () {
 
     document.getElementById('nuke-overlay').style.opacity = 0;
 
-    if (window.civ.has_won) {
+    if (window.Civ.has_won) {
         addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild... again.");
     }
     else {
@@ -69,6 +70,7 @@ addEventListener('load', function () {
     playAudio('background', true);
 });
 
+/*
 class Project 
 {
     constructor(id, name, label, time_per_tick, people = 0, wood = 0, metal = 0, uranium = 0) 
@@ -142,10 +144,10 @@ class Project
     // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
     startTimer() 
     {
-        window.civ.people -= this.people;
-        window.civ.wood -= this.wood;
-        window.civ.metal -= this.metal;
-        window.civ.uranium -= this.uranium;
+        window.Civ.people -= this.people;
+        window.Civ.wood -= this.wood;
+        window.Civ.metal -= this.metal;
+        window.Civ.uranium -= this.uranium;
 
         axios.post('/resources/pay', { people: this.people, wood: this.wood, metal: this.metal, uranium: this.uranium }).then(function (response) {
             console.log(response);
@@ -233,6 +235,7 @@ class Resource
         );
     }
 }
+*/
 
 class Report 
 {
@@ -252,6 +255,7 @@ import MaterialsPanel from './components/panels/MaterialsPanel';
 import ResearchPanel from './components/panels/ResearchPanel';
 
 // Global Variables
+/*
 window.availableTechs = [];
 var techs = window.availableTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
@@ -273,6 +277,7 @@ for (var i = 0; i < resData.length; ++i) {
         new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick)
     );
 }
+*/
 
 window.reports = [
 ];
@@ -285,21 +290,14 @@ function addReport(id, time, message, type="normal")
 
 function updateResources(name, quantity)
 {
-    window.civ[name] = quantity;
+    window.Civ[name] = quantity;
 }
 
 const app = new Vue({
     el: '#app',
     data: {
-        civ: window.civ,
-
-        availableTechs: window.availableTechs,
-
-        completedTechs: window.completedTechs,
-
+        civ: window.Civ,
         reports: window.reports,
-
-        resources: window.Resources,
     },
 
     components: {
@@ -310,6 +308,7 @@ const app = new Vue({
 
     methods: {
         reset() {
+            /*
             axios.post('/reset').then(function (response) {
                 var resources = response.data.resources;
                 for (var key in resources) {
@@ -319,12 +318,16 @@ const app = new Vue({
                 console.log('/RESET ERROR');
                 console.log(error);
             });
+            */
         },
 
         atEndGame() {
+            /*
             return completedTechs.some(function (element) {
                 return element.id === 5;
             });
+            */
+            return false;
         },
 
         win() {

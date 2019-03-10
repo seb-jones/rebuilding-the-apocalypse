@@ -1771,8 +1771,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    civ: Object,
-    resources: Array
+    civ: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    materials: function materials() {
+      return [{
+        id: 1,
+        label: "People",
+        name: "people"
+      }, {
+        id: 2,
+        label: "Lumber",
+        name: "lumber"
+      }, {
+        id: 3,
+        label: "Metal",
+        name: "metal"
+      }, {
+        id: 4,
+        label: "Uranium",
+        name: "uranium"
+      }];
+    }
   }
 });
 
@@ -1801,13 +1824,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    resource: Object
+    material: {
+      type: Object,
+      required: true
+    }
   },
   computed: {
     progressStyle: function progressStyle() {
-      return "width: " + this.resource.progress + "%";
+      return "width: " + this.material.progress + "%";
     }
   }
 });
@@ -1847,25 +1874,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    project: Object,
-    resources: Array
-  },
+  props: [{
+    research: Object,
+    required: true
+  }],
   computed: {
     progressStyle: function progressStyle() {
       return "width: " + this.project.progress + "%";
     },
     canStart: function canStart() {
       var result = true;
-
+      return true;
+      /*
       for (var i = 0; i < this.resources.length; ++i) {
-        if (window.civ[this.resources[i].name] < this.project[this.resources[i].name]) {
-          console.log(this.resources.name);
-          result = false;
-          break;
-        }
+          if (window.civ[this.resources[i].name] < this.project[this.resources[i].name]) {
+              console.log(this.resources.name);
+              result = false;
+              break;
+          }
       }
+      */
 
       return result;
     }
@@ -1893,12 +1924,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    civ: Object,
-    resources: Array
-  },
+  props: {},
   components: {
     MaterialsAssignment: _assignments_MaterialsAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      materials: []
+    };
   }
 });
 
@@ -1933,13 +1966,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    projects: Array,
-    resources: Array,
-    completedTechs: Array
-  },
+  props: {},
   components: {
     ResearchAssignment: _assignments_ResearchAssignment__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      researches: [],
+      completedResearches: []
+    };
   }
 });
 
@@ -36990,9 +37025,9 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "resource-bar" },
-    _vm._l(_vm.resources, function(resource) {
-      return _c("li", { key: resource.id }, [
-        _vm._v(_vm._s(resource.label) + ": " + _vm._s(_vm.civ[resource.name]))
+    _vm._l(_vm.materials, function(material) {
+      return _c("li", { key: material.id }, [
+        _vm._v(_vm._s(material.label) + ": " + _vm._s(_vm.civ[material.name]))
       ])
     }),
     0
@@ -37024,19 +37059,19 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _c("p", { staticClass: "float-left" }, [
-          _vm._v(_vm._s(_vm.resource.assignment_label))
+          _vm._v(_vm._s(_vm.material.assignment_label))
         ]),
         _vm._v(" "),
-        _vm.resource.progress == 0
+        _vm.material.progress == 0
           ? _c(
               "button",
               {
                 staticClass: "float-right btn btn-dark",
-                attrs: { type: "button", disabled: _vm.resource.progress > 0 },
+                attrs: { type: "button", disabled: _vm.material.progress > 0 },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
-                    return _vm.resource.startTimer($event)
+                    return _vm.material.startTimer($event)
                   }
                 }
               },
@@ -37046,7 +37081,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm.resource.progress > 0
+    _vm.material.progress > 0
       ? _c("div", { staticClass: "progress" }, [
           _c(
             "div",
@@ -37055,12 +37090,12 @@ var render = function() {
               style: _vm.progressStyle,
               attrs: {
                 role: "progressbar",
-                "aria-valuenow": _vm.resource.progress,
+                "aria-valuenow": _vm.material.progress,
                 "aria-valuemin": "0",
                 "aria-valuemax": "100"
               }
             },
-            [_vm._v(_vm._s(_vm.resource.progress))]
+            [_vm._v(_vm._s(_vm.material.progress))]
           )
         ])
       : _vm._e()
@@ -37092,52 +37127,34 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _c("p", { staticClass: "float-left" }, [
-          _vm._v(_vm._s(_vm.project.label))
+          _vm._v(_vm._s(_vm.research.label))
         ]),
         _vm._v(" "),
-        _vm.project.progress == 0
+        _vm.research.progress == 0
           ? _c(
               "button",
               {
                 staticClass: "float-right btn btn-dark",
                 attrs: {
                   type: "button",
-                  disabled: _vm.project.progress > 0 || !_vm.canStart
+                  disabled: _vm.research.progress > 0 || !_vm.canStart
                 },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
-                    return _vm.project.startTimer($event)
+                    return _vm.research.startTimer($event)
                   }
                 }
               },
               [_vm._v("Start")]
             )
           : _vm._e()
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "requirements col-12" },
-        [
-          _c("p", [_vm._v("Requirements:")]),
-          _vm._l(_vm.resources, function(resource) {
-            return _c("p", { key: resource.id }, [
-              _vm._v(
-                _vm._s(resource.label) +
-                  ": " +
-                  _vm._s(_vm.project[resource.name])
-              )
-            ])
-          })
-        ],
-        2
-      )
+      ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-8" }, [
-        _vm.project.progress > 0
+        _vm.research.progress > 0
           ? _c("div", { staticClass: "progress" }, [
               _c(
                 "div",
@@ -37146,12 +37163,12 @@ var render = function() {
                   style: _vm.progressStyle,
                   attrs: {
                     role: "progressbar",
-                    "aria-valuenow": _vm.project.progress,
+                    "aria-valuenow": _vm.research.progress,
                     "aria-valuemin": "0",
                     "aria-valuemax": "100"
                   }
                 },
-                [_vm._v(_vm._s(_vm.project.progress))]
+                [_vm._v(_vm._s(_vm.research.progress))]
               )
             ])
           : _vm._e()
@@ -37184,11 +37201,11 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "materials-panel panel" },
-    _vm._l(_vm.resources, function(resource) {
+    _vm._l(_vm.materials, function(material) {
       return _c("materials-assignment", {
-        key: resource.id,
+        key: material.id,
         staticClass: "py-2",
-        attrs: { resource: resource }
+        attrs: { material: material }
       })
     }),
     1
@@ -37220,16 +37237,16 @@ var render = function() {
     "div",
     { staticClass: "project-panel panel" },
     [
-      _vm._l(_vm.projects, function(project) {
+      _vm._l(_vm.researches, function(research) {
         return _c("research-assignment", {
-          key: project.id,
+          key: research.id,
           staticClass: "py-2",
-          attrs: { project: project, resources: _vm.resources }
+          attrs: { research: research }
         })
       }),
       _vm._v(" "),
-      _vm.completedTechs.length > 0
-        ? _c("div", { staticClass: "completed-techs" }, [
+      _vm.completedResearches.length > 0
+        ? _c("div", { staticClass: "completed-researches" }, [
             _vm._m(0),
             _vm._v(" "),
             _c(
@@ -37239,7 +37256,7 @@ var render = function() {
                 _c(
                   "ul",
                   { staticClass: "mt-3" },
-                  _vm._l(_vm.completedTechs, function(t) {
+                  _vm._l(_vm.completedResearches, function(t) {
                     return _c("li", { key: t.id }, [_vm._v(_vm._s(t.label))])
                   }),
                   0
@@ -49398,10 +49415,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_panels_ResearchPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/panels/ResearchPanel */ "./resources/js/components/panels/ResearchPanel.vue");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.AvailableTechIndex = -1;
@@ -49418,7 +49431,8 @@ function playAudio(name) {
     }
 
     window.Sounds[name].play();
-  } catch (e) {} finally {
+  } catch (e) {//
+  } finally {
     return null;
   }
 } // Set Up Audio
@@ -49456,7 +49470,7 @@ addEventListener('load', function () {
 
   document.getElementById('nuke-overlay').style.opacity = 0;
 
-  if (window.civ.has_won) {
+  if (window.Civ.has_won) {
     addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild... again.");
   } else {
     addReport(Math.random(), Date.now(), "Civilisation has begun to rebuild...");
@@ -49464,187 +49478,172 @@ addEventListener('load', function () {
 
   playAudio('background', true);
 });
-
-var Project =
-/*#__PURE__*/
-function () {
-  function Project(id, name, label, time_per_tick) {
-    var people = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 0;
-    var wood = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
-    var metal = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
-    var uranium = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 0;
-
-    _classCallCheck(this, Project);
-
-    this.id = id;
-    this.name = name;
-    this.label = label;
-    this.progress = 0;
-    this.timer = null;
-    this.time_per_tick = time_per_tick;
-    this.people = people;
-    this.wood = wood;
-    this.metal = metal;
-    this.uranium = uranium;
-  }
-
-  _createClass(Project, [{
-    key: "tick",
-    value: function tick() {
-      this.progress++;
-
-      if (this.progress >= 100) {
+/*
+class Project 
+{
+    constructor(id, name, label, time_per_tick, people = 0, wood = 0, metal = 0, uranium = 0) 
+    {
+        this.id = id;
+        this.name = name;
+        this.label = label;
         this.progress = 0;
+        this.timer = null;
+        this.time_per_tick = time_per_tick;
+        this.people = people;
+        this.wood = wood;
+        this.metal = metal;
+        this.uranium = uranium;
+    }
 
-        if (this.timer !== null) {
-          clearInterval(this.timer);
-          this.timer = null;
-        }
+    tick() 
+    {
+        this.progress++;
 
-        for (var i = 0; i < availableTechs.length; ++i) {
-          if (availableTechs[i].id === this.id) {
-            window.AvailableTechIndex = i;
-            axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/projects/complete', {
-              id: availableTechs[i].id
-            }).then(function (response) {
-              if (response.data) {
-                var unlocked = response.data;
+        if (this.progress >= 100) {
+            this.progress = 0;
 
-                if (unlocked != null) {
-                  if (unlocked.tech) {
-                    var t = unlocked.tech;
-                    availableTechs.push(new Project(t.id, t.name, t.label, t.time_per_tick, t.people, t.wood, t.metal, t.uranium));
-                  }
+            if (this.timer !== null) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
 
-                  if (unlocked.resource) {
-                    var r = unlocked.resource;
-                    window.Resources.push(new Resource(r.id, r.name, r.label, r.assignment_label, r.time_per_tick));
-                  }
+            for (var i = 0; i < availableTechs.length; ++i) {
+                if (availableTechs[i].id === this.id) {
+                    window.AvailableTechIndex = i;
+
+                    axios.post('/projects/complete', { id: availableTechs[i].id }).then(function (response) { 
+                        if (response.data) {
+                            var unlocked = response.data;
+                            if (unlocked != null) {
+                                if (unlocked.tech) {
+                                    var t = unlocked.tech;
+
+                                    availableTechs.push(
+                                        new Project(t.id, t.name, t.label, t.time_per_tick, t.people, t.wood, t.metal, t.uranium)
+                                    );
+                                }
+
+                                if (unlocked.resource) {
+                                    var r = unlocked.resource;
+
+                                    window.Resources.push(
+                                        new Resource(r.id, r.name, r.label, r.assignment_label, r.time_per_tick)
+                                    );
+                                }
+                            }
+                        }
+
+                        var t = availableTechs.splice(window.AvailableTechIndex, 1);
+                        completedTechs.push(t[0]);
+
+                        playAudio('project');
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+                    break;
                 }
-              }
+            }
 
-              var t = availableTechs.splice(window.AvailableTechIndex, 1);
-              completedTechs.push(t[0]);
-              playAudio('project');
-            }).catch(function (error) {
-              console.log(error);
-            });
-            break;
-          }
+            addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
         }
-
-        addReport(Math.random(), Date.now(), "Research into '" + this.label + "' technology is complete.", "normal");
-      }
-    } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
-
-  }, {
-    key: "startTimer",
-    value: function startTimer() {
-      window.civ.people -= this.people;
-      window.civ.wood -= this.wood;
-      window.civ.metal -= this.metal;
-      window.civ.uranium -= this.uranium;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/pay', {
-        people: this.people,
-        wood: this.wood,
-        metal: this.metal,
-        uranium: this.uranium
-      }).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log("RESOURCE/PAY ERROR: ");
-        console.log(error);
-      });
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), this.time_per_tick);
     }
-  }]);
 
-  return Project;
-}();
+    // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
+    startTimer() 
+    {
+        window.Civ.people -= this.people;
+        window.Civ.wood -= this.wood;
+        window.Civ.metal -= this.metal;
+        window.Civ.uranium -= this.uranium;
 
-var Resource =
-/*#__PURE__*/
-function () {
-  function Resource(id, name, label, assignment_label, time_per_tick) {
-    _classCallCheck(this, Resource);
-
-    this.id = id;
-    this.name = name;
-    this.label = label;
-    this.assignment_label = assignment_label;
-    this.time_per_tick = time_per_tick;
-    this.progress = 0;
-    this.timer = null;
-  }
-
-  _createClass(Resource, [{
-    key: "tick",
-    value: function tick() {
-      this.progress++;
-
-      if (this.progress >= 100) {
-        playAudio(this.name);
-        this.progress = 0;
-
-        if (this.timer !== null) {
-          clearInterval(this.timer);
-          this.timer = null;
-        }
-
-        var msg = null;
-
-        switch (this.name) {
-          case "people":
-            msg = "New person recruited.";
-            break;
-
-          case "wood":
-            msg = "Wood collected.";
-            break;
-
-          case "metal":
-            msg = "Metal mined.";
-            break;
-
-          case "uranium":
-            msg = "Uranium enriched.";
-            break;
-        }
-
-        if (msg) {
-          addReport(Math.random(), Date.now(), msg);
-        }
-
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/resources/increment', {
-          name: this.name
-        }).then(function (response) {
-          updateResources(response.data.name, response.data.quantity);
+        axios.post('/resources/pay', { people: this.people, wood: this.wood, metal: this.metal, uranium: this.uranium }).then(function (response) {
+            console.log(response);
         }).catch(function (error) {
-          console.log("RESOURCES/INCREMENT ERROR");
-          console.log(error);
+            console.log("RESOURCE/PAY ERROR: ");
+            console.log(error);
         });
-      }
-    } // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
 
-  }, {
-    key: "startTimer",
-    value: function startTimer() {
-      if (this.timer) clearInterval(this.timer);
-      this.timer = setInterval(function (self) {
-        return function () {
-          self.tick();
-        };
-      }(this), this.time_per_tick);
+        if (this.timer)
+            clearInterval(this.timer);
+
+        this.timer = setInterval(
+            (function(self) {
+                return function() {
+                    self.tick();
+                }
+            })(this),
+
+            this.time_per_tick
+        );
     }
-  }]);
+}
 
-  return Resource;
-}();
+class Resource 
+{
+    constructor(id, name, label, assignment_label, time_per_tick) {
+        this.id = id;
+        this.name = name;
+        this.label = label;
+        this.assignment_label = assignment_label;
+        this.time_per_tick = time_per_tick;
+        this.progress = 0;
+        this.timer = null;
+    }
+
+    tick() 
+    {
+        this.progress++;
+
+        if (this.progress >= 100) {
+            playAudio(this.name);
+
+            this.progress = 0;
+
+            if (this.timer !== null) {
+                clearInterval(this.timer);
+                this.timer = null;
+            }
+
+            var msg = null;
+            switch (this.name) {
+                case "people": msg = "New person recruited."; break;
+                case "wood": msg = "Wood collected."; break;
+                case "metal": msg = "Metal mined."; break;
+                case "uranium": msg = "Uranium enriched."; break;
+            }
+
+            if (msg) {
+                addReport(Math.random(), Date.now(), msg);
+            }
+
+            axios.post('/resources/increment', { name: this.name }).then(function (response) {
+                updateResources(response.data.name, response.data.quantity);
+            }).catch(function (error) {
+                console.log("RESOURCES/INCREMENT ERROR");
+                console.log(error);
+            });
+        }
+    }
+
+    // Black magic to allow 'this' to be accessed in a setInterval function: https://stackoverflow.com/questions/2749244/javascript-setinterval-and-this-solution
+    startTimer() 
+    {
+        if (this.timer)
+            clearInterval(this.timer);
+
+        this.timer = setInterval(
+            (function(self) {
+                return function() {
+                    self.tick();
+                }
+            })(this),
+
+            this.time_per_tick
+        );
+    }
+}
+*/
 
 var Report = function Report(id, time, message, type) {
   _classCallCheck(this, Report);
@@ -49661,26 +49660,29 @@ var Report = function Report(id, time, message, type) {
 
  // Global Variables
 
+/*
 window.availableTechs = [];
 var techs = window.availableTechsRaw;
-
 for (var i = 0; i < techs.length; ++i) {
-  window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick, techs[i].people, techs[i].wood, techs[i].metal, techs[i].uranium));
+    window.availableTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick, techs[i].people, techs[i].wood, techs[i].metal, techs[i].uranium));
 }
 
 window.completedTechs = [];
-techs = window.completedTechsRaw;
 
+techs = window.completedTechsRaw;
 for (var i = 0; i < techs.length; ++i) {
-  window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
+    window.completedTechs.push(new Project(techs[i].id, techs[i].name, techs[i].label, techs[i].time_per_tick));
 }
 
 window.Resources = [];
 var resData = window.resourceData;
 
 for (var i = 0; i < resData.length; ++i) {
-  window.Resources.push(new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick));
+    window.Resources.push(
+        new Resource(resData[i].id, resData[i].name, resData[i].label, resData[i].assignment_label, resData[i].time_per_tick)
+    );
 }
+*/
 
 window.reports = []; // Global Functions
 
@@ -49690,17 +49692,14 @@ function addReport(id, time, message) {
 }
 
 function updateResources(name, quantity) {
-  window.civ[name] = quantity;
+  window.Civ[name] = quantity;
 }
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {
-    civ: window.civ,
-    availableTechs: window.availableTechs,
-    completedTechs: window.completedTechs,
-    reports: window.reports,
-    resources: window.Resources
+    civ: window.Civ,
+    reports: window.reports
   },
   components: {
     MaterialsBar: _components_MaterialsBar__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -49709,21 +49708,25 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   methods: {
     reset: function reset() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/reset').then(function (response) {
-        var resources = response.data.resources;
-
-        for (var key in resources) {
-          updateResources(key, resources[key]);
-        }
+      /*
+      axios.post('/reset').then(function (response) {
+          var resources = response.data.resources;
+          for (var key in resources) {
+              updateResources(key, resources[key]);
+          }
       }).catch(function (error) {
-        console.log('/RESET ERROR');
-        console.log(error);
+          console.log('/RESET ERROR');
+          console.log(error);
       });
+      */
     },
     atEndGame: function atEndGame() {
+      /*
       return completedTechs.some(function (element) {
-        return element.id === 5;
+          return element.id === 5;
       });
+      */
+      return false;
     },
     win: function win() {
       window.Sounds.background.pause();

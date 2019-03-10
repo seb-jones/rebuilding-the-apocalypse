@@ -1,6 +1,6 @@
 <template>
     <div class='materials-panel panel'>
-        <materials-assignment class='py-2' v-for='resource in resources' :key='resource.id' :resource='resource'></materials-assignment>
+        <materials-assignment class='py-2' v-for='material in materials' :key='material.id' :material='material'></materials-assignment>
     </div>
 </template>
 
@@ -9,11 +9,14 @@ import MaterialsAssignment from '../assignments/MaterialsAssignment';
 
 export default {
     props: {
-        civ: Object,
-        resources: Array
     },
     components: {
         MaterialsAssignment
+    },
+    data() {
+        return {
+            materials: []
+        }
     }
 }
 </script>

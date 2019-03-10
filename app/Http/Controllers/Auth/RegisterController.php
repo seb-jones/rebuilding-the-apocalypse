@@ -73,9 +73,9 @@ class RegisterController extends Controller
 
         $civ = Civ::create();
 
-        DB::table('available_techs')->insert([
+        DB::table('available_researches')->insert([
             'civ_id' => $civ->id,
-            'tech_id' => 1,
+            'research_id' => 1,
         ]);
 
         $user->civ_id = $civ->id;
